@@ -11,7 +11,7 @@ public class RedisHttpSessionTest {
 	@Test
 	public void testOperatAttribute(){
 		RedisHttpSession session = new RedisHttpSession(null, "token");
-		Person p = new Person("³ÌÅÊ",123);
+		Person p = new Person("ç¨‹æ”€",123);
 		session.setAttribute("userInfo", p);
 		
 		System.out.println(session.getAttribute("userInfo").toString());
