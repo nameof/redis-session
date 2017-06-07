@@ -1,5 +1,7 @@
 package cas.test.service;
 
+import java.lang.reflect.Method;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +20,14 @@ public class UserServiceTest {
 	@Test
 	public void testGetUser(){
 		System.out.println(userService.getUserByNamePasswd("123",""));
+	}
+	
+	@Test
+	public void testProxyObject(){
+		System.out.println(userService);
+		Method[] methods = userService.getClass().getMethods();
+		for(Method m : methods){
+			System.out.println(m.getName());
+		}
 	}
 }
