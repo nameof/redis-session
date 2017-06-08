@@ -11,30 +11,28 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cas.custom.component.SSOServletRequestWrapper;
+import cas.custom.component.CasHttpServletRequest;
 import cas.utils.RedisUtil;
 
 public class RedisSessionFilter implements Filter{
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest re = (HttpServletRequest)request;  
-        HttpServletResponse res = (HttpServletResponse)response;  
-        SSOServletRequestWrapper wrapper = new SSOServletRequestWrapper(re,res);  
+        HttpServletRequest req = (HttpServletRequest)request;  
+        HttpServletResponse resp = (HttpServletResponse)response;  
+        CasHttpServletRequest wrapper = new CasHttpServletRequest(req, resp);  
         chain.doFilter(wrapper, response);
         RedisUtil.returnResource();//release redis
 	}
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
 		
 	}
 

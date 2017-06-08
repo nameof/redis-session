@@ -19,7 +19,7 @@ public class UserServiceTest {
 	
 	@Test
 	public void testGetUser(){
-		System.out.println(userService.getUserByNamePasswd("123",""));
+		System.out.println(userService.verifyUserLogin("123",""));
 	}
 	
 	@Test

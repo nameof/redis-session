@@ -3,9 +3,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>登录</title>
+    <title>欢迎</title>
   </head>
-  
   <body>
+  		welcome !  ${user.name}
   </body>
 </html>

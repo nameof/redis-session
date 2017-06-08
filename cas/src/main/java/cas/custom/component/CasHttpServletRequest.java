@@ -11,16 +11,16 @@ import org.apache.commons.lang.StringUtils;
 
 import cas.utils.CookieUtil;
 
-public class SSOServletRequestWrapper extends HttpServletRequestWrapper {  
+public class CasHttpServletRequest extends HttpServletRequestWrapper {  
   
     private HttpSession session;  
     private HttpServletResponse response;  
-    public SSOServletRequestWrapper(HttpServletRequest request, HttpServletResponse response) {  
+    public CasHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {  
         super(request);
         this.response = response;
     }  
   
-    @Override  
+    @Override
     public HttpSession getSession(boolean create) {  
         if(session != null) {  
             return session;
