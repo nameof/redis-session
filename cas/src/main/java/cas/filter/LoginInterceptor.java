@@ -8,7 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 public class LoginInterceptor implements HandlerInterceptor{  
-  
+
     public void afterCompletion(HttpServletRequest request,  
             HttpServletResponse response, Object handler, Exception exc)  
             throws Exception {  
