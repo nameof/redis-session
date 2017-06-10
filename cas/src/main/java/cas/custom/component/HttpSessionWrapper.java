@@ -9,15 +9,16 @@ import javax.servlet.http.HttpSessionContext;
 public class HttpSessionWrapper implements HttpSession {  
   
 	
-    private HttpSession session; 
+    private HttpSession session;
+    private final long creationTime = System.currentTimeMillis();
     
-    public HttpSessionWrapper(HttpSession session) {  
+    public HttpSessionWrapper(HttpSession session) {
         this.session = session;  
     }
     
     @Override
-    public long getCreationTime() {  
-        return this.session.getCreationTime();  
+    public long getCreationTime() {
+        return creationTime;
     }  
   
     @Override  
@@ -47,7 +48,7 @@ public class HttpSessionWrapper implements HttpSession {
   
     @Override  
     public HttpSessionContext getSessionContext() {  
-        return this.session.getSessionContext();  
+    	throw new UnsupportedOperationException("getSessionContext");
     }  
   
     @Override  
