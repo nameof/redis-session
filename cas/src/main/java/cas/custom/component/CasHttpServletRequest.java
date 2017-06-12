@@ -15,7 +15,7 @@ public class CasHttpServletRequest extends HttpServletRequestWrapper {
   
     private HttpSession session;  
     private HttpServletResponse response;
-    private static String COOKIE_SESSION_KEY = "token";
+    public static String COOKIE_SESSION_KEY = "token";
     public CasHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {  
         super(request);
         this.response = response;
@@ -26,12 +26,12 @@ public class CasHttpServletRequest extends HttpServletRequestWrapper {
         if (session != null) {  
             return session;
         }
-        String token = CookieUtil.getCookie(this, COOKIE_SESSION_KEY);
+        String token = CookieUtil.getCookieValue(this, COOKIE_SESSION_KEY);
         if (StringUtils.isBlank(token)) {
         	token = UUID.randomUUID().toString();
         	CookieUtil.addCookie(response, COOKIE_SESSION_KEY, token);
         }
-        session = new RedisHttpSession(super.getSession(),token);  
+        session = new RedisHttpSession(super.getSession(), token);  
         return session;
     }
   

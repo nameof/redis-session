@@ -16,29 +16,62 @@ import org.apache.commons.lang.StringUtils;
 
 import cas.utils.RedisUtil;
 
-public class RedisHttpSession extends HttpSessionWrapper {  
+public class RedisHttpSession extends HttpSessionWrapper 
+		implements CustomSessionProcessor{  
   
-    private final String token;
-    private int maxInactiveInterval;
-    private static int DEFAULT_EXPIRE = 60 * 30;
+	/**
+	 * 默认过期时间为30分钟
+	 */
+    private final static int DEFAULT_EXPIRE = 60 * 30;
     
-    public RedisHttpSession(HttpSession session,String token) {  
-        super(session);  
+    /**
+     * 一旦调用setMaxInactiveInterval，就会把maxInactiveInterval值存入Redis，
+     * 以REDIS_EXPIRE_KEY为token的fieldKey进行存储
+     */
+    private final static String REDIS_EXPIRE_KEY = "originalExpire";
+    private final static byte[] REDIS_EXPIRE_KEY_BYTE_VALUE = REDIS_EXPIRE_KEY.getBytes();
+    
+    private final String token;
+    private final byte[] tokenBytes;
+    private int maxInactiveInterval = DEFAULT_EXPIRE;
+    private boolean isPersistKey = false;
+    
+    public RedisHttpSession(HttpSession session, String token) {  
+        super(session);
         this.token = token;
-        maxInactiveInterval = DEFAULT_EXPIRE;
+        this.tokenBytes = token.getBytes();
+        initialize();
     }
   
+
+	@Override
+	public void initialize() {
+        //从Redis中读取maxInactiveInterval信息
+		byte[] originalExpireBytes = RedisUtil.getJedis().hget(tokenBytes, REDIS_EXPIRE_KEY_BYTE_VALUE);
+		if (originalExpireBytes != null) {
+			Integer originalExpire = (Integer) deserizlize(originalExpireBytes);
+			this.maxInactiveInterval = originalExpire;
+			if (originalExpire == -1) {
+				isPersistKey = true;
+			}
+		}
+	}
+
+	@Override
+	public void commit() {
+		
+	}
+    
 	@Override  
-    public int getMaxInactiveInterval() {  
+    public int getMaxInactiveInterval() { 
         return maxInactiveInterval;
     }
 	
 	@Override  
     public void setMaxInactiveInterval(int maxInactiveInterval) {
-		if (maxInactiveInterval == -1) {
-			//永不过期
-		}
         this.maxInactiveInterval = maxInactiveInterval;
+        RedisUtil.getJedis().hset(tokenBytes, REDIS_EXPIRE_KEY_BYTE_VALUE, serialize(Integer.valueOf(maxInactiveInterval)));
+        setExpireToRedis();
     }
 	
     @Override  
@@ -48,7 +81,7 @@ public class RedisHttpSession extends HttpSessionWrapper {
     
   	@Override  
     public Enumeration<String> getAttributeNames() {
-  		Set<byte[]> keys = RedisUtil.getJedis().hkeys(token.getBytes());
+  		Set<byte[]> keys = RedisUtil.getJedis().hkeys(tokenBytes);
   		if (keys == null) {
   			return null;
   		}
@@ -61,7 +94,7 @@ public class RedisHttpSession extends HttpSessionWrapper {
 
     @Override  
 	public String[] getValueNames() {
-    	Set<byte[]> keys = RedisUtil.getJedis().hkeys(token.getBytes());
+    	Set<byte[]> keys = RedisUtil.getJedis().hkeys(tokenBytes);
     	if (keys == null) {
   			return null;
   		}
@@ -76,7 +109,7 @@ public class RedisHttpSession extends HttpSessionWrapper {
 	
 	@Override  
 	public void setAttribute(String name, Object value) {
-		RedisUtil.getJedis().hset(token.getBytes(), name.getBytes(), serialize(value));
+		RedisUtil.getJedis().hset(tokenBytes, name.getBytes(), serialize(value));
 		setExpireToRedis();
 	}  
 
@@ -84,7 +117,7 @@ public class RedisHttpSession extends HttpSessionWrapper {
 	public Object getAttribute(String name) {
 		if (StringUtils.isBlank(name))
 			return null;
-		byte[] value = RedisUtil.getJedis().hget(token.getBytes(), name.getBytes());
+		byte[] value = RedisUtil.getJedis().hget(tokenBytes, name.getBytes());
 		Object object = deserizlize(value);
 		setExpireToRedis();
 		return object;
@@ -92,14 +125,22 @@ public class RedisHttpSession extends HttpSessionWrapper {
 	
 	@Override  
 	public void invalidate() {
-		RedisUtil.getJedis().del(token.getBytes());
+		RedisUtil.getJedis().del(tokenBytes);
 	}
 	
 	private void setExpireToRedis() {
-		RedisUtil.getJedis().expire(token.getBytes(), maxInactiveInterval);
-	} 
+		if (maxInactiveInterval == -1) {
+			if (!isPersistKey) {
+				RedisUtil.getJedis().persist(tokenBytes);
+				isPersistKey = true;
+			}
+		}
+		else {
+			RedisUtil.getJedis().expire(tokenBytes, maxInactiveInterval);
+		}
+	}
 	
-    public static byte [] serialize(Object obj) {
+    private static byte [] serialize(Object obj) {
     	if (obj == null)
     		return null;
         ObjectOutputStream obi=null;
@@ -116,7 +157,7 @@ public class RedisHttpSession extends HttpSessionWrapper {
         return null;
     }
     
-    public static Object deserizlize(byte[] byt) {
+    private static Object deserizlize(byte[] byt) {
     	if (byt == null)
     		return null;
         ObjectInputStream oii=null;
