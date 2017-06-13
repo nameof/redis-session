@@ -20,7 +20,7 @@ import cas.utils.CookieUtil;
 public class SystemController {
 
 	/**
-	 * "记住我"过期策略为15天，作用于Cookie，Session
+	 * "记住我"过期策略为15天，作用于Cookie的maxAge，Session的MaxInactiveInterval
 	 */
 	private static final int REMEMBER_LOGIN_STATE_TIME = 15 * 24 * 60 * 60;
 	

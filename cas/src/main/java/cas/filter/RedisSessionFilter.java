@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cas.custom.component.CasHttpServletRequest;
+import cas.custom.component.CustomSessionProcessor;
 import cas.utils.RedisUtil;
 
 public class RedisSessionFilter implements Filter{
@@ -28,6 +29,10 @@ public class RedisSessionFilter implements Filter{
         HttpServletResponse resp = (HttpServletResponse)response;  
         CasHttpServletRequest wrapper = new CasHttpServletRequest(req, resp);  
         chain.doFilter(wrapper, response);
+        
+        if (wrapper.getSession() instanceof CustomSessionProcessor) {
+        	((CustomSessionProcessor) wrapper.getSession()).commit();
+        }
         RedisUtil.returnResource();//release redis
 	}
 
