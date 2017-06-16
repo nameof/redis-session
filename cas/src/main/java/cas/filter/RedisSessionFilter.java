@@ -27,7 +27,12 @@ public class RedisSessionFilter implements Filter{
 			FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest)request;  
         HttpServletResponse resp = (HttpServletResponse)response;  
-        CasHttpServletRequest wrapper = new CasHttpServletRequest(req, resp);  
+        CasHttpServletRequest wrapper = new CasHttpServletRequest(req, resp);
+        
+        if (wrapper.getSession() instanceof CustomSessionProcessor) {
+        	((CustomSessionProcessor) wrapper.getSession()).initialize();
+        }
+        
         chain.doFilter(wrapper, response);
         
         if (wrapper.getSession() instanceof CustomSessionProcessor) {

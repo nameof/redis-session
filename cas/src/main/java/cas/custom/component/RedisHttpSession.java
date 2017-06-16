@@ -40,7 +40,6 @@ public class RedisHttpSession extends HttpSessionWrapper
         super(session);
         this.token = token;
         this.tokenBytes = token.getBytes();
-        initialize();
     }
   
 
