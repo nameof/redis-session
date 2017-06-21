@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +49,12 @@ public class RedisHttpSession extends HttpSessionWrapper implements
 	public RedisHttpSession(HttpSession session, String token) {
 		super(session);
 		this.token = token;
-		this.tokenBytes = token.getBytes();
+		try {
+			this.tokenBytes = token.getBytes(DEFAULT_CHARSET);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 		initialize();
 	}
 
@@ -117,8 +123,13 @@ public class RedisHttpSession extends HttpSessionWrapper implements
 
 	@Override
 	public void setAttribute(String name, Object value) {
-		RedisUtil.getJedis()
-				.hset(tokenBytes, name.getBytes(), serialize(value));
+		try {
+			RedisUtil.getJedis()
+					.hset(tokenBytes, name.getBytes(DEFAULT_CHARSET), serialize(value));
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -126,7 +137,13 @@ public class RedisHttpSession extends HttpSessionWrapper implements
 		if (StringUtils.isBlank(name)) {
 			return null;
 		}
-		byte[] value = RedisUtil.getJedis().hget(tokenBytes, name.getBytes());
+		byte[] value = null;
+		try {
+			value = RedisUtil.getJedis().hget(tokenBytes, name.getBytes(DEFAULT_CHARSET));
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 		Object object = deserizlize(value);
 		return object;
 	}

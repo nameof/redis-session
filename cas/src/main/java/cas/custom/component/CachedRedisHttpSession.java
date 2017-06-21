@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +48,12 @@ public class CachedRedisHttpSession extends HttpSessionWrapper
 	public CachedRedisHttpSession(HttpSession session, String token) {
 		super(session);
 		this.token = token;
-		this.tokenBytes = token.getBytes();
+		try {
+			this.tokenBytes = token.getBytes(DEFAULT_CHARSET);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 		initialize();
 	}
 
@@ -55,11 +61,18 @@ public class CachedRedisHttpSession extends HttpSessionWrapper
 	public void initialize() {
 		//获取Redis中所有"Attribute"，缓存到本地
 		Map<byte[], byte[]> all = RedisUtil.getJedis().hgetAll(tokenBytes);
-		if (all != null) {
-			Set<Entry<byte[],byte[]>> set = all.entrySet();
-			for (Entry<byte[],byte[]> entry : set) {
-				attributes.put(new String(entry.getKey()), deserizlize(entry.getValue()));
+		try {
+			if (all != null) {
+				Set<Entry<byte[],byte[]>> set = all.entrySet();
+				for (Entry<byte[],byte[]> entry : set) {
+					String key = new String(entry.getKey(), DEFAULT_CHARSET);
+					Object value = deserizlize(entry.getValue());
+					attributes.put(key, value);
+				}
 			}
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
 		}
 		//设置maxInactiveInterval
 		Integer expire = (Integer) attributes.get(REDIS_EXPIRE_KEY);
@@ -75,8 +88,15 @@ public class CachedRedisHttpSession extends HttpSessionWrapper
 	public void commit() {
 		//提交Session属性到Redis中
 		Map<byte[], byte[]> serializedMap = new HashMap<>();
-		for (Entry<String, Object> entry : attributes.entrySet()) {
-			serializedMap.put(entry.getKey().getBytes(), serialize(entry.getValue()));
+		try {
+			for (Entry<String, Object> entry : attributes.entrySet()) {
+				byte[] key = entry.getKey().getBytes(DEFAULT_CHARSET);
+				byte[] serializedValue = serialize(entry.getValue());
+				serializedMap.put(key, serializedValue);
+			}
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
 		}
 		RedisUtil.getJedis().hmset(tokenBytes, serializedMap);
 		setExpireToRedis();
