@@ -16,13 +16,16 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 
 import cas.utils.RedisUtil;
-// TODO 写注释
-public class RedisHttpSession extends HttpSessionWrapper implements
+/**
+ * 默认情况下， DefaultRedisHttpSession实例会在构造时尝试从Reis中加载maxInactiveInterval信息（如果有的话）。
+ * 每一次对Session中Attribute都会直接导致DefaultRedisHttpSession与Redis进行直接交互。
+ * 当前请求完成之后，通过RedisSessionFilter调用commit方法将expire（maxInactiveInterval）提交到Redis中
+ * @author ChengPan
+ */
+public class DefaultRedisHttpSession extends HttpSessionWrapper implements
 		CustomSessionProcessor {
 
-	/**
-	 * 默认过期时间为30分钟
-	 */
+	/** 默认过期时间为30分钟  */
 	private static final int DEFAULT_EXPIRE = 60 * 30;
 
 	private static final String DEFAULT_CHARSET = "UTF-8";
@@ -46,7 +49,7 @@ public class RedisHttpSession extends HttpSessionWrapper implements
     // TODO 处理isInvalid状态,针对invalid会话抛出IllegalStateException异常
 	private boolean isInvalid = false;
 
-	public RedisHttpSession(HttpSession session, String token) {
+	public DefaultRedisHttpSession(HttpSession session, String token) {
 		super(session);
 		this.token = token;
 		try {

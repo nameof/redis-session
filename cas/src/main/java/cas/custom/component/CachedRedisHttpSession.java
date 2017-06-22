@@ -17,19 +17,23 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpSession;
 
 import cas.utils.RedisUtil;
-//TODO 写注释
+
+/**
+ * CachedRedisHttpSession实例会在构造时，尝试从Redis中加载所有的用户会话数据（包括maxInactiveInterval）
+ * 缓存到本地的ConcurrentHashMap中，在当前会话期间，每一次对Session中Attribute的操作都是对于
+ * CachedRedisHttpSession对象缓存的attributes操作
+ * 当前请求完成之后，所有attributes通过RedisSessionFilter调用CachedRedisHttpSession的commit方法提交到
+ * Redis中，同时设置expire过期时间
+ * @author ChengPan
+ */
 public class CachedRedisHttpSession extends HttpSessionWrapper 
 			implements CustomSessionProcessor {
-	/**
-	 * 默认过期时间为30分钟
-	 */
+	/** 默认过期时间为30分钟 */
     private static final int DEFAULT_EXPIRE = 60 * 30;
     
     private static final String DEFAULT_CHARSET = "UTF-8";
     
-    /**
-     * 用于存储maxInactiveInterval到Redis的key
-     */
+    /** 用于存储maxInactiveInterval到Redis的key */
     private static final String REDIS_EXPIRE_KEY = "maxInactiveInterval";
     
     private Map<String,Object> attributes = new ConcurrentHashMap<>();
