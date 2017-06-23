@@ -17,9 +17,14 @@ import org.apache.commons.lang.StringUtils;
 
 import cas.utils.RedisUtil;
 /**
- * 默认情况下， DefaultRedisHttpSession实例会在构造时尝试从Reis中加载maxInactiveInterval信息（如果有的话）。
- * 每一次对Session中Attribute都会直接导致DefaultRedisHttpSession与Redis进行直接交互。
- * 当前请求完成之后，通过RedisSessionFilter调用commit方法将expire（maxInactiveInterval）提交到Redis中
+ * 默认情况下，{@link cas.custom.component.DefaultRedisHttpSession}实例会在构造时尝试从Reis中
+ * 加载maxInactiveInterval信息（如果有的话）.
+ * 
+ * 每一次对Session中Attribute都会直接导致{@link cas.custom.component.DefaultRedisHttpSession}
+ * 与Redis进行直接交互.
+ * 
+ * 当前请求完成之后，通过{@link cas.filter.RedisSessionFilter}调用{@link cas.custom.component.DefaultRedisHttpSession}
+ * 的commit方法将expire（maxInactiveInterval）提交到Redis中.
  * @author ChengPan
  */
 public class DefaultRedisHttpSession extends HttpSessionWrapper implements

@@ -19,11 +19,14 @@ import javax.servlet.http.HttpSession;
 import cas.utils.RedisUtil;
 
 /**
- * CachedRedisHttpSession实例会在构造时，尝试从Redis中加载所有的用户会话数据（包括maxInactiveInterval）
- * 缓存到本地的ConcurrentHashMap中，在当前会话期间，每一次对Session中Attribute的操作都是对于
- * CachedRedisHttpSession对象缓存的attributes操作
- * 当前请求完成之后，所有attributes通过RedisSessionFilter调用CachedRedisHttpSession的commit方法提交到
- * Redis中，同时设置expire过期时间
+ * {@link cas.custom.component.CachedRedisHttpSession}实例会在构造时，尝试从Redis中加载所有的用户会话数据
+ * （包括maxInactiveInterval）缓存到本地的ConcurrentHashMap中.
+ * 
+ * 在当前会话期间，每一次对Session中Attribute的操作都是对于{@link cas.custom.component.CachedRedisHttpSession}
+ * 对象缓存的attributes操作.
+ * 
+ * 当前请求完成之后，所有attributes通过{@link cas.filter.RedisSessionFilter}调用
+ * {@link cas.custom.component.CachedRedisHttpSession}的commit方法提交到Redis中，同时设置expire过期时间.
  * @author ChengPan
  */
 public class CachedRedisHttpSession extends HttpSessionWrapper 
