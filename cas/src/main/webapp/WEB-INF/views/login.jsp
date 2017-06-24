@@ -7,6 +7,7 @@
   </head>
   <body>
   		<form action="${pageContext.request.contextPath}/processLogin" method="post">
+  			<input type="hidden" name="returnUrl" value="${returnUrl}"/>
 			用户名:<input type="text" name="username"/><br /><br />
 			密码:<input type="password" name="passwd"/><br /><br />
 			<input id="rememberMe" name="rememberMe" type="checkbox" checked="checked"/>

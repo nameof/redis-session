@@ -11,11 +11,12 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	public User verifyUserLogin(String username,String passwd){
+	public User verifyUserLogin(String username, String passwd) {
 		User user = userDao.getUserByName(username);
-		if(user == null || !user.getPasswd().equals(passwd)){
+		if (user == null || !user.getPasswd().equals(passwd)) {
 			return null;
 		}
+		user.setPasswd(null);
 		return user;
 	}
 }

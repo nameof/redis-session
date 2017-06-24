@@ -34,5 +34,4 @@
 
 	<mvc:view-controller path="/" view-name="index"/>
 	<mvc:view-controller path="/index" view-name="index"/>
-	<mvc:view-controller path="/login" view-name="login"/>
 </beans>
