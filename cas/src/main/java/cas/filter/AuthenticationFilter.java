@@ -17,7 +17,10 @@ import org.apache.commons.lang.StringUtils;
 import cas.custom.component.DefaultRedisHttpSession;
 import cas.models.User;
 import cas.utils.JsonUtils;
-
+/**
+ * 接收CAS客户端站点的token验证请求，成功返回用户信息
+ * @author ChengPan
+ */
 public class AuthenticationFilter implements Filter{
 
 	@Override

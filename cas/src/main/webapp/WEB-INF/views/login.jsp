@@ -14,6 +14,9 @@
 			<label for="rememberMe">记住我</label> 
 			<br /><br />
 			<input type="submit" value="登陆"/><span style="color:red;" >${error}</span>
+			<br /><br />
+			使用CAS客户端扫描下方二维码，快捷登录<br />
+			<img src="${pageContext.request.contextPath}/public/loginQRCode" width="300px" height="300px" alt="二维码" >
 		</form>
   </body>
 </html>
