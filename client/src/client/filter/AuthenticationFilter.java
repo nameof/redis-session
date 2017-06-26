@@ -51,6 +51,8 @@ public class AuthenticationFilter implements Filter{
 			String url = request.getRequestURL().toString();
 			//HTTP请求验证票据合法性
 			if (StringUtils.isNotBlank(token)) {
+				//TODO 此处的token参数可重构为 通过http header发送cookie到cas而不是请求参数
+				//通过cookie到达cas，可以进行正常的controller层验证，而不是在cas层提供额外的AuthenticationFilter验证
 				String responseStr = HttpRequest.sendPost(CAS_VALIDATE_TOKEN_URL, TICKET_KEY + "=" + token);
 				if (StringUtils.isNotBlank(responseStr)) {
 					User user = JsonUtils.toBean(responseStr, User.class);
