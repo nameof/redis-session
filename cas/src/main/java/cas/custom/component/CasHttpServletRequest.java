@@ -26,6 +26,9 @@ public class CasHttpServletRequest extends HttpServletRequestWrapper {
         if (session != null) {  
             return session;
         }
+        if (!create) {
+        	return null;
+        }
         String token = CookieUtil.getCookieValue(this, COOKIE_SESSION_KEY);
         if (StringUtils.isBlank(token)) {
         	token = UUID.randomUUID().toString();

@@ -11,9 +11,9 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	public User verifyUserLogin(String username, String passwd) {
-		User user = userDao.getUserByName(username);
-		if (user == null || !user.getPasswd().equals(passwd)) {
+	public User verifyUserLogin(User inputUser) {
+		User user = userDao.getUserByName(inputUser.getName());
+		if (user == null || !user.getPasswd().equals(inputUser.getPasswd())) {
 			return null;
 		}
 		user.setPasswd(null);

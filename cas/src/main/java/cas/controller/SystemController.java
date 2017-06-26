@@ -50,13 +50,14 @@ public class SystemController {
 					    Model model) throws IOException {
 		User user = (User) session.getAttribute("user");
 		if (user != null) {
-			//返回客户端
+			//已登录，直接携带token返回客户端站点
 			if (StringUtils.isNotBlank(returnUrl)) {
 				backupToClient(returnUrl, session, response);
 				return null;
 			}
 		}
 		else {
+			//返回地址存入表单隐藏域
 			model.addAttribute(RETURN_URL_KEY, returnUrl);
 		}
 		return "login";
@@ -77,8 +78,7 @@ public class SystemController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/processLogin", method = RequestMethod.POST)
-	public String processLogin(String username,
-							   String passwd,
+	public String processLogin(User inputUser,
 							   Boolean rememberMe,
 							   String returnUrl,
 							   HttpSession session,
@@ -86,9 +86,9 @@ public class SystemController {
 							   HttpServletRequest request,
 							   Model model) throws UnsupportedEncodingException, IOException {
 		
-		User user = userService.verifyUserLogin(username, passwd);
+		User user = userService.verifyUserLogin(inputUser);
 		if (user == null) {
-			//回传返回地址隐藏域参数
+			//回传返回地址到隐藏域
 			model.addAttribute(RETURN_URL_KEY, returnUrl);
 			model.addAttribute("error", "用户名或密码错误!");
 			return "login";
@@ -96,6 +96,7 @@ public class SystemController {
 		else {
 			session.setAttribute("user", user);
 			if (rememberMe == Boolean.TRUE) {
+				//"记住我"
 				session.setMaxInactiveInterval(REMEMBER_LOGIN_STATE_TIME);
 				Cookie sessionCookie = CookieUtil.getCookie(request, CasHttpServletRequest.COOKIE_SESSION_KEY);
 				if (sessionCookie != null) {
@@ -103,6 +104,7 @@ public class SystemController {
 					response.addCookie(sessionCookie);
 				}
 			}
+			//携带token返回客户端站点
 			if (StringUtils.isNotBlank(returnUrl)) {
 				backupToClient(returnUrl, session, response);
 				return null;
@@ -111,6 +113,13 @@ public class SystemController {
 		}
 	}
 
+	/**
+	 * 携带token返回客户端站点
+	 * @param returnUrl
+	 * @param session
+	 * @param response
+	 * @throws IOException
+	 */
 	private void backupToClient(String returnUrl, HttpSession session, HttpServletResponse response) throws IOException {
 		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET));
 		builder.addParameter(TICKET_KEY, session.getId());
@@ -118,7 +127,7 @@ public class SystemController {
 	}
 	
 	/**
-	 * 网页验证扫码登录
+	 * 网页轮询验证扫码登录
 	 * @param session
 	 * @return
 	 */
@@ -142,11 +151,9 @@ public class SystemController {
 	 */
 	@RequestMapping(value = "/processQRCodeLogin", method = RequestMethod.POST)
 	@ResponseBody
-	public String processQRCodeLogin(String username,
-							   String passwd,
-							   HttpSession session) {
+	public String processQRCodeLogin(User inputUser, HttpSession session) {
 		String msg = "";
-		User user = userService.verifyUserLogin(username, passwd);
+		User user = userService.verifyUserLogin(inputUser);
 		if (user == null) {
 			msg = "用户名或密码错误!";
 		}

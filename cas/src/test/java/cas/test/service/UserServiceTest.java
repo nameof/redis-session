@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import cas.models.User;
 import cas.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)  
@@ -19,7 +20,7 @@ public class UserServiceTest {
 	
 	@Test
 	public void testGetUser(){
-		System.out.println(userService.verifyUserLogin("123",""));
+		System.out.println(userService.verifyUserLogin(new User("cp", "123")));
 	}
 	
 	@Test

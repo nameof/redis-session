@@ -18,6 +18,14 @@ import com.google.zxing.WriterException;
 @RequestMapping("/public")
 public class PublicController {
 
+	/**
+	 * 生成带有会话id的二维码供客户端登录
+	 * @param response
+	 * @param request
+	 * @param session
+	 * @throws WriterException
+	 * @throws IOException
+	 */
 	@RequestMapping("loginQRCode")
 	public void loginQRCode(HttpServletResponse response, HttpServletRequest request,
 			HttpSession session) throws WriterException, IOException {

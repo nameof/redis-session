@@ -30,7 +30,7 @@ public class RedisSessionFilter implements Filter{
         CasHttpServletRequest wrapper = new CasHttpServletRequest(req, resp);
         chain.doFilter(wrapper, response);
         
-        if (wrapper.getSession() instanceof CustomSessionProcessor) {
+        if (wrapper.getSession(false) instanceof CustomSessionProcessor) {
         	((CustomSessionProcessor) wrapper.getSession()).commit();
         }
         RedisUtil.returnResource();//release redis
