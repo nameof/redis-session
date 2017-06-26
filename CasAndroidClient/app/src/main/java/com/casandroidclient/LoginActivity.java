@@ -27,17 +27,15 @@ public class LoginActivity extends AppCompatActivity {
                 String name = userName.getText().toString().trim();
                 String passwd = password.getText().toString().trim();
                 if (!"".equals(name) && !"".equals(passwd)) {
-                    if (name.equals(passwd)) {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("username", name);
-                        bundle.putString("password", name);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "用户名和密码不一致", Toast.LENGTH_LONG).show();
-                    }
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", name);
+                    bundle.putString("password", name);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "用户名和密码不能为空!", Toast.LENGTH_LONG).show();
                 }
             }
         });

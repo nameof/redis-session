@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,8 +15,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.casandroidclient.component.CustomAlertDialogFactory;
+import com.casandroidclient.utils.HttpRequest;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import static android.R.id.message;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView showName;
     private ProgressDialog mProgressDialog;
     private static final int REQUEST_SCAN = 0;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            mProgressDialog.dismiss();
+            Toast.makeText(MainActivity.this,msg.obj.toString(),Toast.LENGTH_LONG).show();
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,15 +83,27 @@ public class MainActivity extends AppCompatActivity {
             }
             mProgressDialog.show();
             final String result = data.getStringExtra("barCode");
-            new Handler().postDelayed(new Runnable() {
+            new Thread(){
                 @Override
                 public void run() {
-                    if (null != mProgressDialog && mProgressDialog.isShowing()) {
-                        mProgressDialog.dismiss();
-                        Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+                    String msg = "";
+                    try {
+                        JSONObject json = new JSONObject(result);
+                        String token = json.getString("sessionid");
+                        Map<String, String> cookies = new HashMap<>();
+                        cookies.put("token", token);
+                        msg = HttpRequest.httpPost(HttpRequest.SERVER,
+                                "username=" + username + "&passwd=" + password, cookies);
+                    } catch (JSONException e) {
+                        msg = "不合法的二维码!";
+                    }catch (IOException e) {
+                        msg = "请求失败!" + e;
                     }
+                    Message message = handler.obtainMessage();
+                    message.obj = msg;
+                    handler.sendMessageDelayed(message, 2000);
                 }
-            }, 2000);
+            }.start();
         }
     }
 }
