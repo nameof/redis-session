@@ -16,7 +16,18 @@
     <context:component-scan base-package="cas" use-default-filters="false">
     	<context:include-filter type="annotation"  expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
-	<mvc:annotation-driven/>
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                    	<!-- ResponseBody编码 -->
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+	</mvc:annotation-driven>
 	<mvc:default-servlet-handler/>
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     	<property name="prefix" value="/WEB-INF/views/"></property>
@@ -28,6 +39,8 @@
 	        <mvc:mapping path="/**" />
 	        <mvc:exclude-mapping path="/login"/>
 	        <mvc:exclude-mapping path="/processLogin"/>
+	        <mvc:exclude-mapping path="/processQRCodeLogin"/>
+	        <mvc:exclude-mapping path="/verifyQRCodeLogin"/>
 	        <mvc:exclude-mapping path="/public/**"/>
 	        <bean class="cas.filter.LoginInterceptor"/>
 	    </mvc:interceptor>

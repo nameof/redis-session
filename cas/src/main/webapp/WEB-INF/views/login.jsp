@@ -4,6 +4,19 @@
 <html>
   <head>
     <title>登录</title>
+    <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    	function queryLoginState() {
+    		$.post("${pageContext.request.contextPath}/verifyQRCodeLogin","",function (data) {
+    			if (data) {
+    				window.location.href = "${pageContext.request.contextPath}/index";
+    			}
+    		});
+    	}
+    	$(function () {
+    		window.setInterval("queryLoginState();", 3000);
+    	});
+    </script>
   </head>
   <body>
   		<form action="${pageContext.request.contextPath}/processLogin" method="post">

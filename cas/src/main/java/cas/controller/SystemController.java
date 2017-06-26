@@ -3,6 +3,8 @@ package cas.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cas.custom.component.CasHttpServletRequest;
 import cas.models.User;
@@ -59,6 +62,20 @@ public class SystemController {
 		return "login";
 	}
 
+	/**
+	 * 处理网页登录
+	 * @param username
+	 * @param passwd
+	 * @param rememberMe
+	 * @param returnUrl
+	 * @param session
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/processLogin", method = RequestMethod.POST)
 	public String processLogin(String username,
 							   String passwd,
@@ -93,10 +110,51 @@ public class SystemController {
 			return "redirect:/index";
 		}
 	}
-	
+
 	private void backupToClient(String returnUrl, HttpSession session, HttpServletResponse response) throws IOException {
 		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET));
 		builder.addParameter(TICKET_KEY, session.getId());
 		response.sendRedirect(builder.toString());
 	}
+	
+	/**
+	 * 网页验证扫码登录
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/verifyQRCodeLogin", method = RequestMethod.POST)
+	@ResponseBody
+	public Boolean verifyQRCodeLogin(HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return Boolean.FALSE;
+		}
+		else {
+			return Boolean.TRUE;
+		}
+	}
+	
+	/**
+	 * 处理手机客户端扫码登录
+	 * @param username
+	 * @param passwd
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/processQRCodeLogin", method = RequestMethod.POST)
+	@ResponseBody
+	public String processQRCodeLogin(String username,
+							   String passwd,
+							   HttpSession session) {
+		String msg = "";
+		User user = userService.verifyUserLogin(username, passwd);
+		if (user == null) {
+			msg = "用户名或密码错误!";
+		}
+		else {
+			session.setAttribute("user", user);
+			msg = "登录成功!";
+		}
+		return msg;
+	}
+	
 }
