@@ -66,9 +66,10 @@ public class HttpRequest {
 	 * 
 	 * @param url 发送请求的 URL
 	 * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+	 * @param cookies cookie
 	 * @return 所代表远程资源的响应结果
 	 */
-	public static String sendPost(String url, String param) {
+	public static String sendPost(String url, String param, Map<String, String> cookies) {
 		PrintWriter out = null;
 		BufferedReader in = null;
 		String result = "";
@@ -81,6 +82,13 @@ public class HttpRequest {
 			conn.setRequestProperty("connection", "Keep-Alive");
 			conn.setRequestProperty("user-agent",
 					"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+			String cookieStr = "";
+			if (cookies != null) {
+				for (Map.Entry<String, String> entry : cookies.entrySet()) {
+	                cookieStr += (entry.getKey() + "=" + entry.getValue() + ";");
+	            }
+			}
+			conn.setRequestProperty("Cookie", cookieStr);
 			// 发送POST请求必须设置如下两行
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
@@ -97,11 +105,10 @@ public class HttpRequest {
 			while ((line = in.readLine()) != null) {
 				result += line;
 			}
-		} catch (Exception e) {
-			System.out.println("发送 POST 请求出现异常！" + e);
-			e.printStackTrace();
 		}
-		// 使用finally块来关闭输出流、输入流
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 		finally {
 			try {
 				if (out != null) {
@@ -110,7 +117,8 @@ public class HttpRequest {
 				if (in != null) {
 					in.close();
 				}
-			} catch (IOException ex) {
+			}
+			catch (IOException ex) {
 				ex.printStackTrace();
 			}
 		}
