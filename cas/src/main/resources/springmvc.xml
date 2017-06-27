@@ -41,6 +41,7 @@
 	        <mvc:exclude-mapping path="/processLogin"/>
 	        <mvc:exclude-mapping path="/processQRCodeLogin"/>
 	        <mvc:exclude-mapping path="/verifyQRCodeLogin"/>
+	        <mvc:exclude-mapping path="/validatetoken"/>
 	        <mvc:exclude-mapping path="/public/**"/>
 	        <bean class="cas.filter.LoginInterceptor"/>
 	    </mvc:interceptor>

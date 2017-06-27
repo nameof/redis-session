@@ -3,8 +3,6 @@ package cas.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -124,6 +122,17 @@ public class SystemController {
 		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET));
 		builder.addParameter(TICKET_KEY, session.getId());
 		response.sendRedirect(builder.toString());
+	}
+	
+	/**
+	 * 为客户端站点验证token
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "/validatetoken", method = RequestMethod.POST)
+	@ResponseBody
+	public Object validatetoken(HttpSession session) {
+		return session.getAttribute("user");
 	}
 	
 	/**
