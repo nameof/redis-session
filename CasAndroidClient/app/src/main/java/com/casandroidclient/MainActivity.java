@@ -1,7 +1,9 @@
 package com.casandroidclient;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
@@ -11,7 +13,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.casandroidclient.component.CustomAlertDialogFactory;
@@ -20,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //处理二维码
         if (requestCode == REQUEST_SCAN && resultCode == RESULT_OK) {
             if (mProgressDialog == null) {
                 mProgressDialog  = CustomAlertDialogFactory.createProgressDialog(this,
@@ -93,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         Map<String, String> cookies = new HashMap<>();
                         cookies.put("token", token);
                         msg = HttpRequest.httpPost(HttpRequest.SERVER,
-                                "username=" + username + "&passwd=" + password, cookies);
+                                "name=" + username + "&passwd=" + password, cookies);
                     } catch (JSONException e) {
                         msg = "不合法的二维码!";
                     }catch (IOException e) {
@@ -104,6 +112,54 @@ public class MainActivity extends AppCompatActivity {
                     handler.sendMessageDelayed(message, 2000);
                 }
             }.start();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = new MenuInflater(this);
+        inflater.inflate(R.menu.main_menu, menu);
+        setIconEnable(menu,true);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 显示自定义菜单图标
+     * @param menu
+     * @param enable
+     */
+    private void setIconEnable(Menu menu, boolean enable)
+    {
+        try {
+            Class<?> clazz = Class.forName("com.android.internal.view.menu.MenuBuilder");
+            Method m = clazz.getDeclaredMethod("setOptionalIconsVisible", boolean.class);
+            m.setAccessible(true);
+            m.invoke(menu, enable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_serverUrl:
+                final EditText et = new EditText(this);
+                et.setText(HttpRequest.SERVER);
+                new AlertDialog.Builder(this).setTitle("设置服务器地址")
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setView(et)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                HttpRequest.SERVER = et.getText().toString();
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
