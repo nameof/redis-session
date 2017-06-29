@@ -15,6 +15,11 @@ import cas.custom.component.CasHttpServletRequest;
 import cas.custom.component.CustomSessionProcessor;
 import cas.utils.RedisUtil;
 
+/**
+ * 处理请求之前，对HttpServletRequest实现包装
+ * 请求完成之后，提交自定义Session数据到缓存中，并释放Jedis资源
+ * @author ChengPan
+ */
 public class RedisSessionFilter implements Filter{
 
 	@Override
