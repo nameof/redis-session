@@ -43,6 +43,24 @@ public class RedisCacheDao implements CacheDao{
 		}
 		return attributes;
 	}
+	
+
+	@Override
+	public void setAllAttributes(String key, Map<String, Object> attributes) {
+		//提交Session属性到缓存中
+		Map<byte[], byte[]> serializedMap = new HashMap<>();
+		try {
+			for (Entry<String, Object> entry : attributes.entrySet()) {
+				byte[] byteKey = entry.getKey().getBytes(DEFAULT_CHARSET);
+				byte[] serializedValue = serialize(entry.getValue());
+				serializedMap.put(byteKey, serializedValue);
+			}
+			RedisUtil.getJedis().hmset(key.getBytes(DEFAULT_CHARSET), serializedMap);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}	
+	}
 
 	@Override
 	public Object getAttribute(String key, String fieldName) {
@@ -119,6 +137,24 @@ public class RedisCacheDao implements CacheDao{
 	public void setExpire(String key, int expire) {
 		try {
 			RedisUtil.getJedis().expire(key.getBytes(DEFAULT_CHARSET), expire);
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Long getExpire(String key) {
+		try {
+			return RedisUtil.getJedis().ttl(key.getBytes(DEFAULT_CHARSET));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void setPersist(String key) {
+		try {
+			RedisUtil.getJedis().persist(key.getBytes(DEFAULT_CHARSET));
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
