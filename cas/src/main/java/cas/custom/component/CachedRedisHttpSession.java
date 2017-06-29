@@ -31,6 +31,9 @@ import cas.utils.RedisUtil;
  */
 public class CachedRedisHttpSession extends HttpSessionWrapper 
 			implements CustomSessionProcessor {
+	
+	private static final long serialVersionUID = -248646772305855733L;
+
 	/** 默认过期时间为30分钟 */
     private static final int DEFAULT_EXPIRE = 60 * 30;
     

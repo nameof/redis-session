@@ -1,15 +1,19 @@
 package cas.custom.component;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
-public class HttpSessionWrapper implements HttpSession {  
+public class HttpSessionWrapper implements HttpSession,Serializable {  
   
 	
-    private HttpSession session;
+	private static final long serialVersionUID = -7569479249899543476L;
+	
+	private HttpSession session;
+	
     private final long creationTime = System.currentTimeMillis();
     
     public HttpSessionWrapper(HttpSession session) {
