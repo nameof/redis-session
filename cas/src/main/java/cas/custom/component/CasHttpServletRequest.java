@@ -34,7 +34,7 @@ public class CasHttpServletRequest extends HttpServletRequestWrapper {
         	token = UUID.randomUUID().toString();
         	CookieUtil.addCookie(response, COOKIE_SESSION_KEY, token);
         }
-        session = new DefaultRedisHttpSession(super.getSession(), token);  
+        session = CustomeHttpSessionFactory.newSessionInstance(super.getSession(), token);  
         return session;
     }
   
