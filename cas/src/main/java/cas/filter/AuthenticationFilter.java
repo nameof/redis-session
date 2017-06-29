@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import cas.custom.component.CustomeHttpSessionFactory;
-import cas.custom.component.DefaultRedisHttpSession;
+import cas.custom.component.CacheHttpSessionFactory;
+import cas.custom.component.DefaultCacheHttpSession;
 import cas.models.User;
 import cas.utils.JsonUtils;
 /**
@@ -36,7 +36,7 @@ public class AuthenticationFilter implements Filter{
 	     HttpServletResponse resp = (HttpServletResponse)response;
 	     String token = req.getParameter("token");
 	     if (StringUtils.isNotBlank(token)) {
-	    	 HttpSession session = CustomeHttpSessionFactory.newSessionInstance(req.getSession(), token);
+	    	 HttpSession session = CacheHttpSessionFactory.newSessionInstance(req.getSession(), token);
 	    	 User user = (User) session.getAttribute("user");
 	    	 if (user != null) {
 	    		 resp.getWriter().write(JsonUtils.toJSONString(user));

@@ -11,12 +11,12 @@ import org.apache.commons.lang.StringUtils;
 
 import cas.utils.CookieUtil;
 
-public class CasHttpServletRequest extends HttpServletRequestWrapper {  
+public class CustomHttpServletRequest extends HttpServletRequestWrapper {  
   
     private HttpSession session;  
     private HttpServletResponse response;
     public static String COOKIE_SESSION_KEY = "token";
-    public CasHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {  
+    public CustomHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {  
         super(request);
         this.response = response;
     }  
@@ -34,7 +34,7 @@ public class CasHttpServletRequest extends HttpServletRequestWrapper {
         	token = UUID.randomUUID().toString();
         	CookieUtil.addCookie(response, COOKIE_SESSION_KEY, token);
         }
-        session = CustomeHttpSessionFactory.newSessionInstance(super.getSession(), token);  
+        session = CacheHttpSessionFactory.newSessionInstance(super.getSession(), token);  
         return session;
     }
   

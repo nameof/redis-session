@@ -2,14 +2,14 @@ package cas.test.component;
 
 import org.junit.Test;
 
-import cas.custom.component.DefaultRedisHttpSession;
+import cas.custom.component.DefaultCacheHttpSession;
 
-public class DefaultRedisHttpSessionTest {
+public class DefaultCacheHttpSessionTest {
 
 	
 	@Test
 	public void testOperatAttribute(){
-		DefaultRedisHttpSession session = new DefaultRedisHttpSession(null, "token");
+		DefaultCacheHttpSession session = new DefaultCacheHttpSession(null, "token");
 		Person p = new Person("程攀",123);
 		session.setAttribute("userInfo", p);
 		System.out.println(session.getAttribute("userInfo").toString());

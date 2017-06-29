@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cas.custom.component.CasHttpServletRequest;
+import cas.custom.component.CustomHttpServletRequest;
 import cas.models.User;
 import cas.service.UserService;
 import cas.utils.CookieUtil;
@@ -96,7 +96,7 @@ public class SystemController {
 			if (rememberMe == Boolean.TRUE) {
 				//"记住我"
 				session.setMaxInactiveInterval(REMEMBER_LOGIN_STATE_TIME);
-				Cookie sessionCookie = CookieUtil.getCookie(request, CasHttpServletRequest.COOKIE_SESSION_KEY);
+				Cookie sessionCookie = CookieUtil.getCookie(request, CustomHttpServletRequest.COOKIE_SESSION_KEY);
 				if (sessionCookie != null) {
 					sessionCookie.setMaxAge(REMEMBER_LOGIN_STATE_TIME);
 					response.addCookie(sessionCookie);
