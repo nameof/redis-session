@@ -40,7 +40,7 @@
 	
 	<filter>
 		<filter-name>redisSessionFilter</filter-name>
-		<filter-class>cas.filter.RedisSessionFilter</filter-class>
+		<filter-class>cas.filter.CacheSessionFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>redisSessionFilter</filter-name>
