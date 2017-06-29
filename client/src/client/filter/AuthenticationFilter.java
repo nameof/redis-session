@@ -84,8 +84,19 @@ public class AuthenticationFilter implements Filter{
 	}
 
 	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-		
+	public void init(FilterConfig config) throws ServletException {
+		String cas_login_url = config.getInitParameter("CAS_LOGIN_URL");
+		if (StringUtils.isNotBlank(cas_login_url)) {
+			CAS_LOGIN_URL = cas_login_url;
+		}
+		String cas_validate_in_controller = config.getInitParameter("CAS_VALIDATE_IN_CONTROLLER");
+		if (StringUtils.isNotBlank(cas_validate_in_controller)) {
+			CAS_VALIDATE_IN_CONTROLLER = cas_validate_in_controller;
+		}
+		String cas_validate_in_filter = config.getInitParameter("CAS_VALIDATE_IN_FILTER");
+		if (StringUtils.isNotBlank(cas_validate_in_filter)) {
+			CAS_VALIDATE_IN_FILTER = cas_validate_in_filter;
+		}
 	}
 
 }
