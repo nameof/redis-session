@@ -11,8 +11,7 @@ import javax.servlet.http.HttpSession;
  */
 public class CacheHttpSessionFactory {
 
-	private CacheHttpSessionFactory() {
-	}
+	private CacheHttpSessionFactory() {}
 
 	private static Class<?> clazz;
 
@@ -20,7 +19,8 @@ public class CacheHttpSessionFactory {
 		try {
 			clazz = Class
 					.forName("cas.custom.component.DefaultCacheHttpSession");
-		} catch (ClassNotFoundException e) {
+		}
+		catch (ClassNotFoundException e) {
 			throw new RuntimeException("can not found session class", e);
 		}
 	}
@@ -30,18 +30,12 @@ public class CacheHttpSessionFactory {
 		try {
 			constructor = clazz.getConstructor(HttpSession.class, String.class);
 			return (HttpSession) constructor.newInstance(session, token);
-		} catch (InstantiationException e) {
-			throw new RuntimeException("InstantiationException in HttpSessionFactory", e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException("IllegalAccessException in HttpSessionFactory", e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("IllegalArgumentException in HttpSessionFactory", e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException("InvocationTargetException in HttpSessionFactory", e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException("NoSuchMethodException in HttpSessionFactory", e);
-		} catch (SecurityException e) {
-			throw new RuntimeException("SecurityException in HttpSessionFactory", e);
+		}
+		catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

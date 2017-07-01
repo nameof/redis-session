@@ -1,23 +1,11 @@
 package cas.custom.component;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
-
 import cas.cdao.CacheDao;
 import cas.cdao.CacheDaoFactory;
-import cas.utils.RedisUtil;
 /**
  * 默认情况下，{@link cas.custom.component.DefaultCacheHttpSession}实例会在构造时尝试从缓存中
  * 加载maxInactiveInterval信息（如果有的话）.

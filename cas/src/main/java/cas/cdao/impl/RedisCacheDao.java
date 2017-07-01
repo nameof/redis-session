@@ -38,7 +38,8 @@ public class RedisCacheDao implements CacheDao{
 					attributes.put(byteKey, value);
 				}
 			}
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 		return attributes;
@@ -68,7 +69,8 @@ public class RedisCacheDao implements CacheDao{
 		try {
 			value = RedisUtil.getJedis().hget(key.getBytes(DEFAULT_CHARSET), fieldName.getBytes(DEFAULT_CHARSET));
 			return deserizlize(value);
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -79,7 +81,8 @@ public class RedisCacheDao implements CacheDao{
 		try {
 			RedisUtil.getJedis().hset(key.getBytes(DEFAULT_CHARSET), fieldName.getBytes(DEFAULT_CHARSET),
 					serialize(value));
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -90,12 +93,15 @@ public class RedisCacheDao implements CacheDao{
 		Set<byte[]> keys = null;
 		try {
 			keys = RedisUtil.getJedis().hkeys(key.getBytes(DEFAULT_CHARSET));
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+		
 		if (keys == null) {
 			return null;
 		}
+		
 		Set<String> skeys = new HashSet<String>();
 		for (byte[] k : keys) {
 			skeys.add(new String(k));
@@ -109,12 +115,15 @@ public class RedisCacheDao implements CacheDao{
 		Set<byte[]> keys = null;
 		try {
 			keys = RedisUtil.getJedis().hkeys(key.getBytes(DEFAULT_CHARSET));
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+		
 		if (keys == null) {
 			return null;
 		}
+		
 		String[] skeys = new String[keys.size()];
 		int i = 0;
 		for (byte[] k : keys) {
@@ -128,7 +137,8 @@ public class RedisCacheDao implements CacheDao{
 	public void del(String key) {
 		try {
 			RedisUtil.getJedis().del(key.getBytes(DEFAULT_CHARSET));
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -137,7 +147,8 @@ public class RedisCacheDao implements CacheDao{
 	public void setExpire(String key, int expire) {
 		try {
 			RedisUtil.getJedis().expire(key.getBytes(DEFAULT_CHARSET), expire);
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -146,7 +157,8 @@ public class RedisCacheDao implements CacheDao{
 	public Long getExpire(String key) {
 		try {
 			return RedisUtil.getJedis().ttl(key.getBytes(DEFAULT_CHARSET));
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -155,7 +167,8 @@ public class RedisCacheDao implements CacheDao{
 	public void setPersist(String key) {
 		try {
 			RedisUtil.getJedis().persist(key.getBytes(DEFAULT_CHARSET));
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}

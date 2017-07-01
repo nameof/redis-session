@@ -40,6 +40,7 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
     
     private int maxInactiveInterval = DEFAULT_EXPIRE;
     
+    /** Session是否永不过期 */
     private boolean isPersistKey = false;
     
     private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();

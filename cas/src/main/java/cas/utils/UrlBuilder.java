@@ -109,7 +109,8 @@ final public class UrlBuilder {
 		if (paths == null) {
 			// 将路径字符串保存为数组
 			paths = new String[] { trimSeparator(path) };
-		} else {
+		}
+		else {
 			// 扩展数组并在最后一项添加路径字符串
 			paths = Arrays.copyOf(paths, paths.length + 1);
 			paths[paths.length - 1] = trimSeparator(path);
@@ -128,7 +129,8 @@ final public class UrlBuilder {
 		// 存储保存路径的数组
 		if (this.paths == null) {
 			this.paths = paths;
-		} else {
+		}
+		else {
 			int len = this.paths.length;
 			this.paths = Arrays.copyOf(this.paths, len + paths.length);
 			for (int i = 0; i < paths.length; i++) {
@@ -403,12 +405,14 @@ final public class UrlBuilder {
 			if (pos2 < 0) {
 				// 令字符串剩余部分作为服务器名称
 				serverName = url.substring(pos).trim();
-			} else {
+			}
+			else {
 				// 将?之前的部分作为服务器名称
 				serverName = url.substring(pos, pos2).trim();
 				queryString = url.substring(pos2 + 1).trim();
 			}
-		} else {
+		}
+		else {
 			// 获取服务器名称
 			serverName = url.substring(pos, pos2).trim();
 		}
@@ -423,7 +427,8 @@ final public class UrlBuilder {
 		if (pos2 < 0) {		// 查找失败
 			// 设定默认端口号
 			port = 80;
-		} else {
+		}
+		else {
 			// 获取端口号
 			port = Integer.parseInt(serverName.substring(pos2 + 1));
 			// 重新设定服务器名称（去除端口号部分）
@@ -437,7 +442,8 @@ final public class UrlBuilder {
 			if (pos2 < 0) {		// 查找失败
 				// 获取路径字符串
 				path = url.substring(pos);
-			} else {
+			}
+			else {
 				// 获取路径字符串
 				path = url.substring(pos, pos2);
 				// 获取参数字符串
@@ -462,7 +468,8 @@ final public class UrlBuilder {
 						try {
 							// 设置参数
 							builder.parameters.put(nv[0], nv.length > 1 ? URLDecoder.decode(nv[1], urlEncoding) : "");
-						} catch (UnsupportedEncodingException e) {
+						}
+						catch (UnsupportedEncodingException e) {
 							throw new IllegalArgumentException(url);
 						}
 					}
@@ -496,7 +503,8 @@ final public class UrlBuilder {
 			// 写入参数分隔符
 			if (spliter == 0) {
 				spliter = '&';
-			} else {
+			}
+			else {
 				s.append(spliter);
 			}
 			// 写入参数名
@@ -505,7 +513,8 @@ final public class UrlBuilder {
 			try {
 				// 写入参数值
 				s.append(e.getValue() == null ? "" : URLEncoder.encode(String.valueOf(e.getValue()), encoding));
-			} catch (UnsupportedEncodingException e1) {
+			}
+			catch (UnsupportedEncodingException e1) {
 				throw new IllegalArgumentException(encoding);
 			}
 		}

@@ -9,7 +9,8 @@ public class CacheDaoFactory {
 		try {
 			clazz = Class
 					.forName("cas.cdao.impl.RedisCacheDao");
-		} catch (ClassNotFoundException e) {
+		}
+		catch (ClassNotFoundException e) {
 			throw new RuntimeException("can not found class", e);
 		}
 	}
@@ -17,9 +18,11 @@ public class CacheDaoFactory {
 	public static CacheDao newCacheDaoInstance() {
 		try {
 			return (CacheDao) clazz.newInstance();
-		} catch (InstantiationException e) {
+		}
+		catch (InstantiationException e) {
 			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
+		}
+		catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}

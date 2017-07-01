@@ -13,7 +13,7 @@ import cas.utils.CookieUtil;
 
 public class CustomHttpServletRequest extends HttpServletRequestWrapper {  
   
-    private HttpSession session;  
+    private HttpSession session;
     private HttpServletResponse response;
     public static String COOKIE_SESSION_KEY = "token";
     public CustomHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {  
@@ -36,10 +36,5 @@ public class CustomHttpServletRequest extends HttpServletRequestWrapper {
         }
         session = CacheHttpSessionFactory.newSessionInstance(super.getSession(), token);  
         return session;
-    }
-  
-    @Override  
-    public HttpSession getSession() {  
-        return getSession(true);
     }
 }  

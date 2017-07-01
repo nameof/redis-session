@@ -29,7 +29,8 @@ public final class RedisUtil {
             config.setMaxIdle(MAX_IDLE);
             config.setTestOnBorrow(TEST_ON_BORROW);
             jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new IllegalStateException("failed to init jedis pool",e); 
         }
     }
@@ -44,7 +45,8 @@ public final class RedisUtil {
         	resource = jedisPool.getResource();
         	threadLocal.set(resource);
         	return resource;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
         	throw new IllegalStateException("failed to get JedisResource from pool",e); 
         }
     }
