@@ -39,11 +39,11 @@
 	</filter-mapping>
 	
 	<filter>
-		<filter-name>redisSessionFilter</filter-name>
+		<filter-name>sessionFilter</filter-name>
 		<filter-class>cas.filter.CacheSessionFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>redisSessionFilter</filter-name>
+		<filter-name>sessionFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

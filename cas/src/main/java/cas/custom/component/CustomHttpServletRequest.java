@@ -37,4 +37,9 @@ public class CustomHttpServletRequest extends HttpServletRequestWrapper {
         session = CacheHttpSessionFactory.newSessionInstance(super.getSession(), token);  
         return session;
     }
+    
+    @Override
+    public HttpSession getSession() {  
+        return this.getSession(true);
+    }
 }  
