@@ -3,6 +3,8 @@ package cas.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import cas.custom.component.CustomHttpServletRequest;
 import cas.models.User;
 import cas.service.UserService;
 import cas.utils.CookieUtil;
+import cas.utils.HttpRequest;
 import cas.utils.UrlBuilder;
 
 @Controller
@@ -35,6 +38,9 @@ public class SystemController {
 	/** 返回地址参数名 */
 	private static final String RETURN_URL_KEY = "returnUrl";
 	
+	/** 注销地址参数名 */
+	private static final String LOGOUT_URL_KEY = "logoutUrl";
+	
 	private static String URL_ENCODING_CHARSET = "UTF-8";
 	
 	@Autowired
@@ -42,21 +48,26 @@ public class SystemController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(String returnUrl,
+						String logoutUrl,
 					    HttpSession session,
 					    HttpServletResponse response,
 					    HttpServletRequest request,
 					    Model model) throws IOException {
 		User user = (User) session.getAttribute("user");
 		if (user != null) {
-			//已登录，直接携带token返回客户端站点
+			//存储客户端注销地址
+			storeLogoutUrl(session, logoutUrl);
+			
+			//直接携带token返回客户端站点
 			if (StringUtils.isNotBlank(returnUrl)) {
-				backupToClient(returnUrl, session, response);
+				backToClient(returnUrl, session, response);
 				return null;
 			}
 		}
 		else {
-			//返回地址存入表单隐藏域
+			//返回地址、注销地址存入表单隐藏域
 			model.addAttribute(RETURN_URL_KEY, returnUrl);
+			model.addAttribute(LOGOUT_URL_KEY, logoutUrl);
 		}
 		return "login";
 	}
@@ -79,6 +90,7 @@ public class SystemController {
 	public String processLogin(User inputUser,
 							   Boolean rememberMe,
 							   String returnUrl,
+							   String logoutUrl,
 							   HttpSession session,
 							   HttpServletResponse response,
 							   HttpServletRequest request,
@@ -86,8 +98,9 @@ public class SystemController {
 		
 		User user = userService.verifyUserLogin(inputUser);
 		if (user == null) {
-			//回传返回地址到隐藏域
+			//回传返回地址、注销地址到隐藏域
 			model.addAttribute(RETURN_URL_KEY, returnUrl);
+			model.addAttribute(LOGOUT_URL_KEY, logoutUrl);
 			model.addAttribute("error", "用户名或密码错误!");
 			return "login";
 		}
@@ -102,13 +115,33 @@ public class SystemController {
 					response.addCookie(sessionCookie);
 				}
 			}
+			
+			//存储客户端注销地址
+			storeLogoutUrl(session, logoutUrl);
+			
 			//携带token返回客户端站点
 			if (StringUtils.isNotBlank(returnUrl)) {
-				backupToClient(returnUrl, session, response);
+				backToClient(returnUrl, session, response);
 				return null;
 			}
 			return "redirect:/index";
 		}
+	}
+
+	private void storeLogoutUrl(HttpSession session, String logoutUrl) throws UnsupportedEncodingException {
+		
+		if (StringUtils.isBlank(logoutUrl))
+			return;
+		
+		@SuppressWarnings("unchecked")
+		List<String> logoutUrls = (List<String>) session.getAttribute(LOGOUT_URL_KEY);
+		if (logoutUrls == null) {
+			logoutUrls = new ArrayList<>();
+		}
+		
+		logoutUrls.add(URLDecoder.decode(logoutUrl, URL_ENCODING_CHARSET));
+		
+		session.setAttribute(LOGOUT_URL_KEY, logoutUrls);
 	}
 
 	/**
@@ -118,11 +151,27 @@ public class SystemController {
 	 * @param response
 	 * @throws IOException
 	 */
-	private void backupToClient(String returnUrl, HttpSession session, HttpServletResponse response) throws IOException {
+	private void backToClient(String returnUrl, HttpSession session, HttpServletResponse response) throws IOException {
 		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET));
 		builder.addParameter(TICKET_KEY, session.getId());
 		response.sendRedirect(builder.toString());
 	}
+	
+	
+	@RequestMapping(value = "/logout")
+	public String logout(HttpSession session) {
+		@SuppressWarnings("unchecked")
+		List<String> logoutUrls = (List<String>) session.getAttribute(LOGOUT_URL_KEY);
+		if (logoutUrls != null) {
+			for (String logoutUrl : logoutUrls) {
+				HttpRequest.sendPost(logoutUrl, "token=" + session.getId(), null);
+			}
+		}
+		
+		session.invalidate();
+		return "redirect:/login";
+	}
+	
 	
 	/**
 	 * 为客户端站点验证token
