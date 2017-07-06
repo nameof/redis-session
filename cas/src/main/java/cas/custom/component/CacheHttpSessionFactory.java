@@ -1,9 +1,10 @@
 package cas.custom.component;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.http.HttpSession;
+
+import cas.support.ConfigLoader;
 
 /**
  * 自定义Session实例工厂
@@ -15,10 +16,12 @@ public class CacheHttpSessionFactory {
 
 	private static Class<?> clazz;
 
+	private static final String SESSION_IMPL_CLASS_KEY = "cache.httpsession.impl.class";
+	
 	static {
 		try {
 			clazz = Class
-					.forName("cas.custom.component.DefaultCacheHttpSession");
+					.forName(ConfigLoader.getConfig(SESSION_IMPL_CLASS_KEY));
 		}
 		catch (ClassNotFoundException e) {
 			throw new RuntimeException("can not found session class", e);

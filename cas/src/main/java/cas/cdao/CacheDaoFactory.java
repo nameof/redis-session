@@ -1,17 +1,21 @@
 package cas.cdao;
 
+import cas.support.ConfigLoader;
+
 public class CacheDaoFactory {
 	private CacheDaoFactory() {}
 
 	private static Class<?> clazz;
+	
+	private static final String CACHE_DAO_IMPL_CLASS_KEY = "cache.dao.impl.class";
 
 	static {
 		try {
 			clazz = Class
-					.forName("cas.cdao.impl.RedisCacheDao");
+					.forName(ConfigLoader.getConfig(CACHE_DAO_IMPL_CLASS_KEY));
 		}
 		catch (ClassNotFoundException e) {
-			throw new RuntimeException("can not found class", e);
+			throw new RuntimeException("can not found CacheDao class", e);
 		}
 	}
 
