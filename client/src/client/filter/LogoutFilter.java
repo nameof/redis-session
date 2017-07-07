@@ -13,6 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import client.cas.component.LogedSessionManager;
 
+/**
+ * 接收服务器的注销请求
+ * @author ChengPan
+ */
 public class LogoutFilter implements Filter{
 
 	@Override

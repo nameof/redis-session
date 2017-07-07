@@ -22,6 +22,12 @@ import client.utils.HttpRequest;
 import client.utils.JsonUtils;
 import client.utils.UrlBuilder;
 
+/**
+ * 这个过滤器的职责：
+ *     登录过滤器
+ *     登录票据验证
+ * @author ChengPan
+ */
 public class AuthenticationFilter implements Filter{
 
 	/** 登录站点地址 */
@@ -79,6 +85,7 @@ public class AuthenticationFilter implements Filter{
 					//存储有效票据到session，以备注销
 					request.getSession().setAttribute("token", token);
 					
+					//添加到已登录session管理器
 					LogedSessionManager.attach(token, request.getSession());
 					
 					UrlBuilder builder = UrlBuilder.parse(url);

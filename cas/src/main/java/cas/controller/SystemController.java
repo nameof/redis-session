@@ -128,6 +128,12 @@ public class SystemController {
 		}
 	}
 
+	/**
+	 * 存储客户端站点登出地址到session
+	 * @param session
+	 * @param logoutUrl 登出地址
+	 * @throws UnsupportedEncodingException
+	 */
 	private void storeLogoutUrl(HttpSession session, String logoutUrl) throws UnsupportedEncodingException {
 		
 		if (StringUtils.isBlank(logoutUrl))
@@ -141,6 +147,7 @@ public class SystemController {
 		
 		logoutUrls.add(URLDecoder.decode(logoutUrl, URL_ENCODING_CHARSET));
 		
+		//即时交互缓存的序列化实现的session，对象实例变化，此处需要重新set
 		session.setAttribute(LOGOUT_URL_KEY, logoutUrls);
 	}
 
@@ -162,6 +169,7 @@ public class SystemController {
 	public String logout(HttpSession session) {
 		@SuppressWarnings("unchecked")
 		List<String> logoutUrls = (List<String>) session.getAttribute(LOGOUT_URL_KEY);
+		//发送注销消息到客户端站点
 		if (logoutUrls != null) {
 			for (String logoutUrl : logoutUrls) {
 				HttpRequest.sendPost(logoutUrl, "token=" + session.getId(), null);

@@ -4,6 +4,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpSession;
 
+/**
+ * 持有已登录的会话session
+ * @author ChengPan
+ */
 public class LogedSessionManager {
 	
 	private LogedSessionManager() {}
