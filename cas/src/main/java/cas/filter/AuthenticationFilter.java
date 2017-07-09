@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import cas.custom.component.CacheHttpSessionFactory;
+import cas.custom.component.factory.CacheHttpSessionFactory;
 import cas.models.User;
 import cas.utils.JsonUtils;
 /**

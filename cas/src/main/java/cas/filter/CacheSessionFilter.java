@@ -11,8 +11,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cas.custom.component.CustomHttpServletRequest;
-import cas.custom.component.CustomSessionProcessor;
+import cas.custom.component.request.CustomHttpServletRequest;
+import cas.custom.component.session.CustomSessionProcessor;
 import cas.utils.RedisUtil;
 
 /**

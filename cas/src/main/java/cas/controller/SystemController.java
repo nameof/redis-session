@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cas.custom.component.CustomHttpServletRequest;
+import cas.custom.component.request.CustomHttpServletRequest;
 import cas.models.User;
 import cas.service.UserService;
 import cas.utils.CookieUtil;
@@ -169,13 +169,13 @@ public class SystemController {
 	public String logout(HttpSession session) {
 		@SuppressWarnings("unchecked")
 		List<String> logoutUrls = (List<String>) session.getAttribute(LOGOUT_URL_KEY);
+		//TODO use MQ
 		//发送注销消息到客户端站点
 		if (logoutUrls != null) {
 			for (String logoutUrl : logoutUrls) {
 				HttpRequest.sendPost(logoutUrl, "token=" + session.getId(), null);
 			}
 		}
-		
 		session.invalidate();
 		return "redirect:/login";
 	}

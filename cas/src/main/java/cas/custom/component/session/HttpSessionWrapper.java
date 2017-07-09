@@ -1,4 +1,4 @@
-package cas.custom.component;
+package cas.custom.component.session;
 
 import java.io.Serializable;
 import java.util.Enumeration;

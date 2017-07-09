@@ -1,4 +1,4 @@
-package cas.custom.component;
+package cas.custom.component.session;
 
 import java.util.Enumeration;
 import java.util.Map;
@@ -9,17 +9,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpSession;
 
 import cas.cdao.CacheDao;
-import cas.cdao.CacheDaoFactory;
+import cas.cdao.factory.CacheDaoFactory;
 
 /**
- * {@link cas.custom.component.BufferedCacheHttpSession}实例会在构造时，尝试从缓存中加载所有的用户会话数据
+ * {@link cas.custom.component.session.BufferedCacheHttpSession}实例会在构造时，尝试从缓存中加载所有的用户会话数据
  * （包括maxInactiveInterval）缓存到本地的ConcurrentHashMap中.
  * 
- * 在当前会话期间，每一次对Session中Attribute的操作都是对于{@link cas.custom.component.BufferedCacheHttpSession}
+ * 在当前会话期间，每一次对Session中Attribute的操作都是对于{@link cas.custom.component.session.BufferedCacheHttpSession}
  * 对象缓存的attributes操作.
  * 
  * 当前请求完成之后，所有attributes通过{@link cas.filter.CacheSessionFilter}调用
- * {@link cas.custom.component.BufferedCacheHttpSession}的commit方法提交到缓存中，同时设置expire过期时间.
+ * {@link cas.custom.component.session.BufferedCacheHttpSession}的commit方法提交到缓存中，同时设置expire过期时间.
  * 
  * @author ChengPan
  */

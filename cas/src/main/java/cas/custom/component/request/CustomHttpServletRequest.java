@@ -1,4 +1,4 @@
-package cas.custom.component;
+package cas.custom.component.request;
 
 import java.util.UUID;
 
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import cas.custom.component.factory.CacheHttpSessionFactory;
 import cas.utils.CookieUtil;
 
 public class CustomHttpServletRequest extends HttpServletRequestWrapper {  

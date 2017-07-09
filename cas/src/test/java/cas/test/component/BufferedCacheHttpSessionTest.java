@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import cas.custom.component.BufferedCacheHttpSession;
+import cas.custom.component.session.BufferedCacheHttpSession;
 
 public class BufferedCacheHttpSessionTest {
 

@@ -2,7 +2,7 @@ package cas.test.component;
 
 import org.junit.Test;
 
-import cas.custom.component.DefaultCacheHttpSession;
+import cas.custom.component.session.DefaultCacheHttpSession;
 
 public class DefaultCacheHttpSessionTest {
 

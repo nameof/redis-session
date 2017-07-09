@@ -1,5 +1,6 @@
-package cas.cdao;
+package cas.cdao.factory;
 
+import cas.cdao.CacheDao;
 import cas.support.ConfigLoader;
 
 public class CacheDaoFactory {

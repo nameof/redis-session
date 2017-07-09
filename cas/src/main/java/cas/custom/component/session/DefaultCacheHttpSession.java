@@ -1,19 +1,19 @@
-package cas.custom.component;
+package cas.custom.component.session;
 
 import java.util.Enumeration;
 
 import javax.servlet.http.HttpSession;
 
 import cas.cdao.CacheDao;
-import cas.cdao.CacheDaoFactory;
+import cas.cdao.factory.CacheDaoFactory;
 /**
- * 默认情况下，{@link cas.custom.component.DefaultCacheHttpSession}实例会在构造时尝试从缓存中
+ * 默认情况下，{@link cas.custom.component.session.DefaultCacheHttpSession}实例会在构造时尝试从缓存中
  * 加载maxInactiveInterval信息（如果有的话）.
  * 
- * 每一次对Session中Attribute都会直接导致{@link cas.custom.component.DefaultCacheHttpSession}
+ * 每一次对Session中Attribute都会直接导致{@link cas.custom.component.session.DefaultCacheHttpSession}
  * 与缓存进行直接交互.
  * 
- * 当前请求完成之后，通过{@link cas.filter.CacheSessionFilter}调用{@link cas.custom.component.DefaultCacheHttpSession}
+ * 当前请求完成之后，通过{@link cas.filter.CacheSessionFilter}调用{@link cas.custom.component.session.DefaultCacheHttpSession}
  * 的commit方法将expire（maxInactiveInterval）提交到缓存中.
  * 
  * @author ChengPan
