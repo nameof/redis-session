@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,9 +23,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cas.custom.component.request.CustomHttpServletRequest;
 import cas.models.User;
+import cas.mq.message.LogoutMessage;
+import cas.mq.sender.LogoutMessageSender;
+import cas.mq.sender.Sender;
+import cas.mq.support.LogoutReceiverDispatcher;
 import cas.service.UserService;
 import cas.utils.CookieUtil;
-import cas.utils.HttpRequest;
 import cas.utils.UrlBuilder;
 
 @Controller
@@ -42,6 +47,12 @@ public class SystemController {
 	private static final String LOGOUT_URL_KEY = "logoutUrl";
 	
 	private static String URL_ENCODING_CHARSET = "UTF-8";
+	
+	private static Sender messageSender = new LogoutMessageSender();
+	
+	static {
+		LogoutReceiverDispatcher.dispatch();
+	}
 	
 	@Autowired
 	private UserService userService;
@@ -169,13 +180,12 @@ public class SystemController {
 	public String logout(HttpSession session) {
 		@SuppressWarnings("unchecked")
 		List<String> logoutUrls = (List<String>) session.getAttribute(LOGOUT_URL_KEY);
-		//TODO use MQ
-		//发送注销消息到客户端站点
+
+		//send logout message
 		if (logoutUrls != null) {
-			for (String logoutUrl : logoutUrls) {
-				HttpRequest.sendPost(logoutUrl, "token=" + session.getId(), null);
-			}
+			messageSender.sendMessage(new LogoutMessage(session.getId(), logoutUrls));
 		}
+		
 		session.invalidate();
 		return "redirect:/login";
 	}
