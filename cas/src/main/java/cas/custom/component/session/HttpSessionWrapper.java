@@ -7,6 +7,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @SuppressWarnings("deprecation")
 public class HttpSessionWrapper implements HttpSession,Serializable {  
   
@@ -16,6 +19,8 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
 	private HttpSession session;
 	
     private final long creationTime = System.currentTimeMillis();
+    
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     
     public HttpSessionWrapper(HttpSession session) {
         this.session = session;  

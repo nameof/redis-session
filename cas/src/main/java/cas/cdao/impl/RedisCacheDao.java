@@ -14,6 +14,9 @@ import java.util.Vector;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cas.cdao.CacheDao;
 import cas.utils.RedisUtil;
 
@@ -24,6 +27,8 @@ import cas.utils.RedisUtil;
 public class RedisCacheDao implements CacheDao{
 
 	private static final String DEFAULT_CHARSET = "UTF-8";
+	
+	private static final Logger logger = LoggerFactory.getLogger(RedisCacheDao.class);
 	
 	@Override
 	public Map<String, Object> getAllAttribute(String key) {
@@ -40,11 +45,17 @@ public class RedisCacheDao implements CacheDao{
 			}
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("getAllAttribute");
 			throw new RuntimeException(e);
 		}
 		return attributes;
 	}
 	
+
+	private void unsupportedEncodingLog(String methodName) {
+		logger.error("RedisCacheDao方法{}中key不支持编码格式{}", methodName, DEFAULT_CHARSET);
+	}
+
 
 	@Override
 	public void setAllAttributes(String key, Map<String, Object> attributes) {
@@ -59,6 +70,7 @@ public class RedisCacheDao implements CacheDao{
 			RedisUtil.getJedis().hmset(key.getBytes(DEFAULT_CHARSET), serializedMap);
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("setAllAttributes");
 			throw new RuntimeException(e);
 		}	
 	}
@@ -71,6 +83,7 @@ public class RedisCacheDao implements CacheDao{
 			return deserizlize(value);
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("getAttribute");
 			throw new RuntimeException(e);
 		}
 	}
@@ -83,6 +96,7 @@ public class RedisCacheDao implements CacheDao{
 					serialize(value));
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("setAttribute");
 			throw new RuntimeException(e);
 		}
 	}
@@ -95,6 +109,7 @@ public class RedisCacheDao implements CacheDao{
 			keys = RedisUtil.getJedis().hkeys(key.getBytes(DEFAULT_CHARSET));
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("getAttributeNames");
 			throw new RuntimeException(e);
 		}
 		
@@ -117,6 +132,7 @@ public class RedisCacheDao implements CacheDao{
 			keys = RedisUtil.getJedis().hkeys(key.getBytes(DEFAULT_CHARSET));
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("getValueNames");
 			throw new RuntimeException(e);
 		}
 		
@@ -139,6 +155,7 @@ public class RedisCacheDao implements CacheDao{
 			RedisUtil.getJedis().del(key.getBytes(DEFAULT_CHARSET));
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("del");
 			throw new RuntimeException(e);
 		}
 	}
@@ -149,6 +166,7 @@ public class RedisCacheDao implements CacheDao{
 			RedisUtil.getJedis().expire(key.getBytes(DEFAULT_CHARSET), expire);
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("setExpire");
 			throw new RuntimeException(e);
 		}
 	}
@@ -159,6 +177,7 @@ public class RedisCacheDao implements CacheDao{
 			return RedisUtil.getJedis().ttl(key.getBytes(DEFAULT_CHARSET));
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("setExpire");
 			throw new RuntimeException(e);
 		}
 	}
@@ -169,6 +188,7 @@ public class RedisCacheDao implements CacheDao{
 			RedisUtil.getJedis().persist(key.getBytes(DEFAULT_CHARSET));
 		}
 		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("setPersist");
 			throw new RuntimeException(e);
 		}
 	}
@@ -187,7 +207,7 @@ public class RedisCacheDao implements CacheDao{
             return byt;
         }
         catch (IOException e) {
-            e.printStackTrace();
+        	logger.error("IOException thrown from RedisCacheDao on object serialize", e);
         }
         return null;
     }
@@ -204,9 +224,11 @@ public class RedisCacheDao implements CacheDao{
             Object obj=oii.readObject();
             return obj;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        catch (IOException e) {
+        	logger.error("IOException thrown from RedisCacheDao on object deserizlize", e);
+        } catch (ClassNotFoundException e) {
+        	logger.error("ClassNotFoundException thrown from RedisCacheDao on object deserizlize", e);
+		}
         return null;
     }
 }

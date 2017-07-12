@@ -5,8 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +48,8 @@ public class SystemController {
 	
 	private static String URL_ENCODING_CHARSET = "UTF-8";
 	
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	
 	private static Sender messageSender = new LogoutMessageSender();
 	
 	static {
@@ -66,6 +68,11 @@ public class SystemController {
 					    Model model) throws IOException {
 		User user = (User) session.getAttribute("user");
 		if (user != null) {
+			
+			if (StringUtils.isNotBlank(returnUrl) && StringUtils.isNotBlank(logoutUrl)) {
+				logger.debug("user {} login from {} logout url is {}", new Object[]{user.getName(), returnUrl, logoutUrl});
+			}
+			
 			//存储客户端注销地址
 			storeLogoutUrl(session, logoutUrl);
 			
@@ -126,6 +133,13 @@ public class SystemController {
 					response.addCookie(sessionCookie);
 				}
 			}
+
+			if (StringUtils.isNotBlank(returnUrl) && StringUtils.isNotBlank(logoutUrl)) {
+				logger.debug("user {} login from {} logout url is {}", new Object[]{user.getName(), returnUrl, logoutUrl});
+			}
+			else {
+				logger.debug("user {} login", user.getName());
+			}
 			
 			//存储客户端注销地址
 			storeLogoutUrl(session, logoutUrl);
@@ -135,6 +149,7 @@ public class SystemController {
 				backToClient(returnUrl, session, response);
 				return null;
 			}
+			
 			return "redirect:/index";
 		}
 	}
