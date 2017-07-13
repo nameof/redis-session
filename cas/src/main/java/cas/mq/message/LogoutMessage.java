@@ -4,6 +4,10 @@ import java.util.List;
 
 import cas.utils.JsonUtils;
 
+/**
+ * 注销消息
+ * @author ChengPan
+ */
 public class LogoutMessage extends Message{
 
 	private static final long serialVersionUID = 1923709448488814904L;

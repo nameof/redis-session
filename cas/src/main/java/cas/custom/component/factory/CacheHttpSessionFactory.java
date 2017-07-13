@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import cas.support.ConfigLoader;
 
 /**
- * 自定义Session实例工厂
+ * 根据{@link cas.support.ConfigLoader}获取自定义HttpSession实现类配置，实例化自定义HttpSession
  * @author ChengPan
  */
 public class CacheHttpSessionFactory {

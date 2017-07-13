@@ -5,6 +5,11 @@ import cas.mq.message.Message;
 import cas.mq.queue.RedisMessageQueue;
 import cas.utils.HttpRequest;
 
+/**
+ * 注销消息接收者
+ * 
+ * @author ChengPan
+ */
 public class LogoutMessageReceiver extends Receiver{
 
 	private static final String LOGOUT_QUEUE_NAME = "logoutQueue";

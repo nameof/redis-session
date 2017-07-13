@@ -5,6 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import cas.mq.message.Message;
 
+/**
+ * 消息队列
+ * 
+ * @author ChengPan
+ */
 public abstract class MessageQueue {
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());

@@ -13,7 +13,7 @@ import cas.cdao.factory.CacheDaoFactory;
 
 /**
  * {@link cas.custom.component.session.BufferedCacheHttpSession}实例会在构造时，尝试从缓存中加载所有的用户会话数据
- * （包括maxInactiveInterval）缓存到本地的ConcurrentHashMap中.
+ * （包括所有属性和maxInactiveInterval）缓存到本地的ConcurrentHashMap中.
  * 
  * 在当前会话期间，每一次对Session中Attribute的操作都是对于{@link cas.custom.component.session.BufferedCacheHttpSession}
  * 对象缓存的attributes操作.

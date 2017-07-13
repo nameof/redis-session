@@ -5,8 +5,12 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import client.cas.component.LogedSessionManager;
-import client.model.User;
 
+/**
+ * 监听session的过期或销毁，从{@link client.cas.component.LogedSessionManager}中移除session
+ * 
+ * @author ChengPan
+ */
 public class SessionLifecycleListener implements HttpSessionListener{
 
 	@Override

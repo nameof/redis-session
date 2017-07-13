@@ -7,6 +7,12 @@ import cas.mq.receiver.LogoutMessageReceiver;
 import cas.mq.receiver.Receiver;
 import cas.utils.RedisUtil;
 
+/**
+ * 注销消息调度器，默认情况下开启一个线程，使用{@link cas.mq.receiver.LogoutMessageReceiver}实例对消息队列进行
+ * 轮询处理
+ * 
+ * @author ChengPan
+ */
 public class LogoutReceiverDispatcher implements Runnable{
 	
 	private Receiver messageReceiver = new LogoutMessageReceiver();

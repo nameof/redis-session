@@ -3,6 +3,11 @@ package cas.support;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * 载入cas-config.properties文件中的配置信息
+ * 
+ * @author ChengPan
+ */
 public class ConfigLoader {
 	private ConfigLoader() {}
 

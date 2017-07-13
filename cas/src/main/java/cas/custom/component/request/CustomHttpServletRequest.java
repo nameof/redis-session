@@ -12,6 +12,11 @@ import org.apache.commons.lang.StringUtils;
 import cas.custom.component.factory.CacheHttpSessionFactory;
 import cas.utils.CookieUtil;
 
+/**
+ * HttpServletRequest的包装类，用于包装获取和创建HttpSession操作
+ * 
+ * @author ChengPan
+ */
 public class CustomHttpServletRequest extends HttpServletRequestWrapper {  
   
     private HttpSession session;

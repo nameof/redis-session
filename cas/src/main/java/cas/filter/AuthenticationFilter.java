@@ -18,7 +18,7 @@ import cas.custom.component.factory.CacheHttpSessionFactory;
 import cas.models.User;
 import cas.utils.JsonUtils;
 /**
- * 接收CAS客户端站点的token验证请求，成功返回用户信息
+ * 接收CAS客户端站点的token验证请求，成功返回JSON格式用户信息
  * @author ChengPan
  */
 public class AuthenticationFilter implements Filter{

@@ -16,7 +16,7 @@ import cas.custom.component.session.CustomSessionProcessor;
 import cas.utils.RedisUtil;
 
 /**
- * 处理请求之前，对HttpServletRequest实现包装
+ * 处理请求之前，对HttpServletRequest包装类的实例化
  * 请求完成之后，提交自定义Session数据到缓存中，并释放缓存连接资源
  * @author ChengPan
  */

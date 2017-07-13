@@ -24,8 +24,8 @@ import client.utils.UrlBuilder;
 
 /**
  * 这个过滤器的职责：
- *     登录过滤器
- *     登录票据验证
+ *     登录过滤
+ *     对cas的登录票据发送http请求验证
  * @author ChengPan
  */
 public class AuthenticationFilter implements Filter{

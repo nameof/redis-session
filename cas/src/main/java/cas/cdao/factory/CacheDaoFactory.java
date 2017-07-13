@@ -3,6 +3,11 @@ package cas.cdao.factory;
 import cas.cdao.CacheDao;
 import cas.support.ConfigLoader;
 
+/**
+ * 根据{@link cas.support.ConfigLoader}获取CacheDao实现类配置，实例化CacheDao
+ * 
+ * @author ChengPan
+ */
 public class CacheDaoFactory {
 	private CacheDaoFactory() {}
 

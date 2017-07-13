@@ -5,7 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpSession;
 
 /**
- * 持有已登录的会话session
+ * 持有已登录的会话session,以便于在session过期，或{@link client.filter.LogoutFilter}收到注销请求时
+ * 根据session中存储的token，或注销请求传递过来的token，将集合中的session取出，进行销毁
+ * 
  * @author ChengPan
  */
 public class LogedSessionManager {

@@ -7,6 +7,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * 登录拦截器
+ * @author ChengPan
+ */
 public class LoginInterceptor implements HandlerInterceptor{  
 
     public void afterCompletion(HttpServletRequest request,  

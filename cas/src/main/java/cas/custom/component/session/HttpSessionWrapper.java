@@ -10,6 +10,11 @@ import javax.servlet.http.HttpSessionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * HttpSession包装类
+ * 
+ * @author ChengPan
+ */
 @SuppressWarnings("deprecation")
 public class HttpSessionWrapper implements HttpSession,Serializable {  
   

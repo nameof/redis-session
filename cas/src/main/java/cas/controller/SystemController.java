@@ -50,7 +50,7 @@ public class SystemController {
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	private static Sender messageSender = new LogoutMessageSender();
+	private static Sender logoutMessageSender = new LogoutMessageSender();
 	
 	static {
 		LogoutReceiverDispatcher.dispatch();
@@ -191,6 +191,12 @@ public class SystemController {
 	}
 	
 	
+	/**
+	 * 注销全局会话，并向客户端站点发送注销消息
+	 * 
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value = "/logout")
 	public String logout(HttpSession session) {
 		@SuppressWarnings("unchecked")
@@ -198,7 +204,7 @@ public class SystemController {
 
 		//send logout message
 		if (logoutUrls != null) {
-			messageSender.sendMessage(new LogoutMessage(session.getId(), logoutUrls));
+			logoutMessageSender.sendMessage(new LogoutMessage(session.getId(), logoutUrls));
 		}
 		
 		session.invalidate();
@@ -209,7 +215,7 @@ public class SystemController {
 	/**
 	 * 为客户端站点验证token
 	 * @param session
-	 * @return
+	 * @return JSON格式的用户信息
 	 */
 	@RequestMapping(value = "/validatetoken", method = RequestMethod.POST)
 	@ResponseBody
@@ -220,7 +226,7 @@ public class SystemController {
 	/**
 	 * 网页轮询验证扫码登录
 	 * @param session
-	 * @return
+	 * @return 用户是否已登录
 	 */
 	@RequestMapping(value = "/verifyQRCodeLogin", method = RequestMethod.POST)
 	@ResponseBody
@@ -238,7 +244,7 @@ public class SystemController {
 	 * @param username
 	 * @param passwd
 	 * @param session
-	 * @return
+	 * @return 登录结果提示消息
 	 */
 	@RequestMapping(value = "/processQRCodeLogin", method = RequestMethod.POST)
 	@ResponseBody
