@@ -26,6 +26,7 @@ public class HttpRequest {
 			// 打开和URL之间的连接
 			URLConnection connection = realUrl.openConnection();
 			// 设置通用的请求属性
+			connection.setConnectTimeout(3000);
 			connection.setRequestProperty("accept", "*/*");
 			connection.setRequestProperty("connection", "Keep-Alive");
 			connection.setRequestProperty("user-agent",
@@ -78,6 +79,7 @@ public class HttpRequest {
 			// 打开和URL之间的连接
 			URLConnection conn = realUrl.openConnection();
 			// 设置通用的请求属性
+			conn.setConnectTimeout(3000);
 			conn.setRequestProperty("accept", "*/*");
 			conn.setRequestProperty("connection", "Keep-Alive");
 			conn.setRequestProperty("user-agent",
