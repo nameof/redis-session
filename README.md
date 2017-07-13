@@ -1,2 +1,2 @@
 # RedisSSO
-基于SSM的单点登录系统，默认使用Redis作为CAS站点的HttpSession存储，可实现跨域共享Session。支持客户端扫码登录。
+基于Redis封装自定义HttpSession，实现跨域单点登录和Session共享，支持android客户端扫码登陆，并使用redis模拟消息队列进行注销消息的发送。
