@@ -15,7 +15,7 @@ import cas.utils.RedisUtil;
  */
 public class LogoutReceiverDispatcher implements Runnable{
 	
-	private Receiver messageReceiver = new LogoutMessageReceiver();
+	private Receiver logoutMessageReceiver = new LogoutMessageReceiver();
 	
 	private static volatile Thread thread;
 	
@@ -30,9 +30,14 @@ public class LogoutReceiverDispatcher implements Runnable{
 		
 		logger.debug("handle message thread start");
 		
-		//TODO 处理异常，健壮执行
 		while (handleMsg) {
-			messageReceiver.handleMessage();
+			//处理异常，健壮执行
+			try {
+				logoutMessageReceiver.handleMessage();
+			}
+			catch (Exception e) {
+				logger.error("注销消息处理异常", e);
+			}
 		}
 		
 		
