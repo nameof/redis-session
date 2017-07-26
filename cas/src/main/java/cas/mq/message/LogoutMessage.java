@@ -27,7 +27,7 @@ public class LogoutMessage extends Message{
 	
 	public LogoutMessage(String token, List<String> logoutUrls) {
 		logoutMessage = new InnerMessage(token, logoutUrls);
-		setContent(JsonUtils.toJSONString(logoutMessage));
+		refreshContent();
 	}
 	
 	public String getToken() {
@@ -36,6 +36,20 @@ public class LogoutMessage extends Message{
 
 	public List<String> getLogoutUrls() {
 		return logoutMessage.getLogoutUrls();
+	}
+	
+	public void setToken(String token) {
+		logoutMessage.setToken(token);
+		refreshContent();
+	}
+	
+	public void setLogoutUrls(List<String> logoutUrls) {
+		logoutMessage.setLogoutUrls(logoutUrls);
+		refreshContent();
+	}
+	
+	private void refreshContent() {
+		setContent(JsonUtils.toJSONString(logoutMessage));
 	}
 	
 	public static class InnerMessage {
