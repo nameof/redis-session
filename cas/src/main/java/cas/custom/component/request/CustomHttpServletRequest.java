@@ -21,7 +21,7 @@ public class CustomHttpServletRequest extends HttpServletRequestWrapper {
   
     private HttpSession session;
     private HttpServletResponse response;
-    public static String COOKIE_SESSION_KEY = "token";
+    public static final String COOKIE_SESSION_KEY = "token";
     public CustomHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {  
         super(request);
         this.response = response;

@@ -46,7 +46,7 @@ public class SystemController {
 	/** 注销地址参数名 */
 	private static final String LOGOUT_URL_KEY = "logoutUrl";
 	
-	private static String URL_ENCODING_CHARSET = "UTF-8";
+	private static final String URL_ENCODING_CHARSET = "UTF-8";
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	

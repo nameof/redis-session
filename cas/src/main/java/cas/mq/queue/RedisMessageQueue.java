@@ -11,7 +11,7 @@ import cas.utils.RedisUtil;
  */
 public class RedisMessageQueue extends MessageQueue {
 
-	private String queueName;
+	private final String queueName;
 	
 	public RedisMessageQueue(String queueName) {
 		this.queueName = queueName;

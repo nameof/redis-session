@@ -21,7 +21,7 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
 	
 	private static final long serialVersionUID = -7569479249899543476L;
 	
-	private HttpSession session;
+	private final HttpSession session;
 	
     private final long creationTime = System.currentTimeMillis();
     

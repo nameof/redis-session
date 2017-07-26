@@ -11,7 +11,7 @@ import cas.support.ConfigLoader;
 public class CacheDaoFactory {
 	private CacheDaoFactory() {}
 
-	private static Class<?> clazz;
+	private static final Class<?> clazz;
 	
 	private static final String CACHE_DAO_IMPL_CLASS_KEY = "cache.dao.impl.class";
 

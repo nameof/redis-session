@@ -12,11 +12,11 @@ import cas.cdao.CacheDao;
 import cas.cdao.factory.CacheDaoFactory;
 
 /**
- * {@link cas.custom.component.session.BufferedCacheHttpSession}实例会在构造时，尝试从缓存中加载所有的用户会话数据
- * （包括所有属性和maxInactiveInterval）缓存到本地的ConcurrentHashMap中.
+ * {@link cas.custom.component.session.BufferedCacheHttpSession}实例会在构造时
+ * 尝试从缓存中加载所有的用户会话数据（包括所有属性和maxInactiveInterval） * 缓存到本地的ConcurrentHashMap中
  * 
  * 在当前会话期间，每一次对Session中Attribute的操作都是对于{@link cas.custom.component.session.BufferedCacheHttpSession}
- * 对象缓存的attributes操作.
+ * 对象ConcurrentHashMap属性缓存的attributes操作.
  * 
  * 当前请求完成之后，所有attributes通过{@link cas.filter.CacheSessionFilter}调用
  * {@link cas.custom.component.session.BufferedCacheHttpSession}的commit方法提交到缓存中，同时设置expire过期时间.
@@ -73,6 +73,8 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 	public void commit() {
 		//提交Session属性到缓存中
 		cacheDao.setAllAttributes(token, attributes);
+		
+		//设置expire
 		setExpireToCache();
 	}
 

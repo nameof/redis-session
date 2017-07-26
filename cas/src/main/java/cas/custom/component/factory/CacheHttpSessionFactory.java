@@ -14,7 +14,7 @@ public class CacheHttpSessionFactory {
 
 	private CacheHttpSessionFactory() {}
 
-	private static Class<?> clazz;
+	private static final Class<?> clazz;
 
 	private static final String SESSION_IMPL_CLASS_KEY = "cache.httpsession.impl.class";
 	
