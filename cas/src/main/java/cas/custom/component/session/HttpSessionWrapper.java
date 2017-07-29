@@ -27,6 +27,8 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
     
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     
+    protected boolean isNew = false;
+    
     public HttpSessionWrapper(HttpSession session) {
         this.session = session;  
     }
@@ -114,5 +116,9 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
     @Override  
     public boolean isNew() {  
         return this.session.isNew();  
-    }  
+    }
+    
+    public void setNew(boolean isNew) {
+    	this.isNew = isNew;
+    }
 }  

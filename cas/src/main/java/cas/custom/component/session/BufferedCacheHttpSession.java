@@ -56,6 +56,7 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 
 	@Override
 	public void initialize() {
+		
 		//获取缓存中所有"Attribute"，缓存到本地
 		attributes.putAll(cacheDao.getAllAttribute(token));
 		
@@ -125,6 +126,11 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 	
 	public boolean isInvalid() {
 		return this.isInvalid;
+	}
+	
+	@Override
+	public boolean isNew() {
+		return this.isNew;
 	}
 	
 	private void setExpireToCache() {

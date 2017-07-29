@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 
 import cas.custom.component.factory.CacheHttpSessionFactory;
+import cas.custom.component.session.HttpSessionWrapper;
 import cas.utils.CookieUtil;
 
 /**
@@ -20,8 +21,13 @@ import cas.utils.CookieUtil;
 public class CustomHttpServletRequest extends HttpServletRequestWrapper {  
   
     private HttpSession session;
+    
     private HttpServletResponse response;
+    
     public static final String COOKIE_SESSION_KEY = "token";
+    
+    private boolean isNewSession = false;
+    
     public CustomHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {  
         super(request);
         this.response = response;
@@ -37,10 +43,14 @@ public class CustomHttpServletRequest extends HttpServletRequestWrapper {
         }
         String token = CookieUtil.getCookieValue(this, COOKIE_SESSION_KEY);
         if (StringUtils.isBlank(token)) {
+        	isNewSession = true;
         	token = UUID.randomUUID().toString();
         	CookieUtil.addCookie(response, COOKIE_SESSION_KEY, token);
         }
-        session = CacheHttpSessionFactory.newSessionInstance(super.getSession(), token);  
+        HttpSessionWrapper session = CacheHttpSessionFactory.newSessionInstance(super.getSession(), token);
+        session.setNew(isNewSession);
+        
+        this.session = session;
         return session;
     }
     

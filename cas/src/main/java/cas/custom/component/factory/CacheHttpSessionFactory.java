@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 
 import javax.servlet.http.HttpSession;
 
+import cas.custom.component.session.HttpSessionWrapper;
 import cas.support.ConfigLoader;
 
 /**
@@ -28,11 +29,11 @@ public class CacheHttpSessionFactory {
 		}
 	}
 
-	public static HttpSession newSessionInstance(HttpSession session, String token) {
+	public static HttpSessionWrapper newSessionInstance(HttpSession session, String token) {
 		Constructor<?> constructor = null;
 		try {
 			constructor = clazz.getConstructor(HttpSession.class, String.class);
-			return (HttpSession) constructor.newInstance(session, token);
+			return (HttpSessionWrapper) constructor.newInstance(session, token);
 		}
 		catch (NoSuchMethodException e) {
 			throw new RuntimeException(e);

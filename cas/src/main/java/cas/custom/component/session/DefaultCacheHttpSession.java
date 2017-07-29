@@ -111,6 +111,11 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	public boolean isInvalid() {
 		return this.isInvalid;
 	}
+	
+	@Override
+	public boolean isNew() {
+		return this.isNew;
+	}
 
 	private void setExpireToCache() {
 		if (maxInactiveInterval == -1) {
