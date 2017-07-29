@@ -28,4 +28,6 @@ public interface CacheDao {
 	 * @param key
 	 */
 	void setPersist(String key);
+	
+	boolean exists(String key);
 }

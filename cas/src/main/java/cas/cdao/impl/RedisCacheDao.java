@@ -192,6 +192,17 @@ public class RedisCacheDao implements CacheDao{
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public boolean exists(String key) {
+		try {
+			return RedisUtil.getJedis().exists(key.getBytes(DEFAULT_CHARSET));
+		}
+		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("setPersist");
+			throw new RuntimeException(e);
+		}
+	}
 	
 	private static byte [] serialize(Object obj) {
     	if (obj == null) {
