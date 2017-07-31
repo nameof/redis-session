@@ -30,7 +30,8 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
     protected boolean isNew = false;
     
     public HttpSessionWrapper(HttpSession session) {
-        this.session = session;  
+        this.session = session;
+        setNew(session.isNew());
     }
     
     @Override
@@ -103,19 +104,19 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
         this.session.removeAttribute(name);  
     }  
   
-    @Override  
+    @Override
     public void removeValue(String name) {  
         this.removeAttribute(name);
     }  
   
-    @Override  
+    @Override
     public void invalidate() {  
         this.session.invalidate();  
     }  
   
-    @Override  
+    @Override
     public boolean isNew() {  
-        return this.session.isNew();  
+        return this.isNew;
     }
     
     public void setNew(boolean isNew) {

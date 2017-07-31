@@ -128,11 +128,6 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 		return this.isInvalid;
 	}
 	
-	@Override
-	public boolean isNew() {
-		return this.isNew;
-	}
-	
 	private void setExpireToCache() {
 		if (maxInactiveInterval == -1) {
 			if (!isPersistKey) {
