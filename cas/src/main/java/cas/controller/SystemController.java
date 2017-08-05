@@ -71,15 +71,16 @@ public class SystemController {
 			
 			if (StringUtils.isNotBlank(returnUrl) && StringUtils.isNotBlank(logoutUrl)) {
 				logger.debug("user {} login from {} logout url is {}", new Object[]{user.getName(), returnUrl, logoutUrl});
-			}
-			
-			//存储客户端注销地址
-			storeLogoutUrl(session, logoutUrl);
-			
-			//直接携带token返回客户端站点
-			if (StringUtils.isNotBlank(returnUrl)) {
+				
+				//存储客户端注销地址
+				storeLogoutUrl(session, logoutUrl);
+
+				//直接携带token返回客户端站点
 				backToClient(returnUrl, session, response);
 				return null;
+			}
+			else {
+				return "redirect:index";//不允许重复登录
 			}
 		}
 		else {
