@@ -29,6 +29,8 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
     
     protected boolean isNew = false;
     
+    protected boolean isInvalid = false;
+    
     public HttpSessionWrapper(HttpSession session) {
         this.session = session;
         setNew(session.isNew());
@@ -36,6 +38,7 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
     
     @Override
     public long getCreationTime() {
+    	checkValid();
         return creationTime;
     }  
   
@@ -116,10 +119,22 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
   
     @Override
     public boolean isNew() {  
+    	checkValid();
         return this.isNew;
     }
     
     public void setNew(boolean isNew) {
+    	checkValid();
     	this.isNew = isNew;
     }
+	
+	public boolean isInvalid() {
+		return this.isInvalid;
+	}
+	
+	protected void checkValid() {
+		if(isInvalid) {
+			throw new IllegalStateException("attempt to access session data after the session has been invalidated!");
+		}
+	}
 }  

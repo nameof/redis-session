@@ -38,10 +38,9 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 
 	private boolean isPersistKey = false;
 	
-    // TODO 处理isInvalid状态,针对invalid会话抛出IllegalStateException异常
-	private boolean isInvalid = false;
-	
 	private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
+	
+	//TODO 添加LastAccessedTime
 
 	public DefaultCacheHttpSession(HttpSession session, String token) {
 		super(session);
@@ -79,37 +78,40 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 
 	@Override
 	public String getId() {
+		checkValid();
 		return token;
 	}
 
 	@Override
 	public Enumeration<String> getAttributeNames() {
+		checkValid();
 		return cacheDao.getAttributeNames(token);
 	}
 
 	@Override
 	public String[] getValueNames() {
+		checkValid();
 		return cacheDao.getValueNames(token);
 	}
 
 	@Override
 	public void setAttribute(String name, Object value) {
+		checkValid();
 		cacheDao.setAttribute(token, name, value);
 	}
 
 	@Override
 	public Object getAttribute(String name) {
+		checkValid();
 		return cacheDao.getAttribute(token, name);
 	}
 
 	@Override
 	public void invalidate() {
+		checkValid();
+		super.invalidate();//invalidate原始HttpSession
 		this.isInvalid = true;
 		cacheDao.del(token);
-	}
-	
-	public boolean isInvalid() {
-		return this.isInvalid;
 	}
 	
 	private void setExpireToCache() {

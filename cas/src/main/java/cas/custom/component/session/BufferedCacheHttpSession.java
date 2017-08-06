@@ -45,8 +45,7 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
     
     private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
     
-    // TODO 处理isInvalid状态,针对invalid会话抛出IllegalStateException异常
-    private boolean isInvalid = false;
+    //TODO 添加LastAccessedTime
     
 	public BufferedCacheHttpSession(HttpSession session, String token) {
 		super(session);
@@ -92,40 +91,43 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
     }
 	
     @Override  
-    public String getId() {  
+    public String getId() {
+    	checkValid();
         return token;  
     }
     
   	@Override  
     public Enumeration<String> getAttributeNames() {
+  		checkValid();
         return new Vector<String>(attributes.keySet()).elements();  
     }
 
     @Override  
 	public String[] getValueNames() {
+    	checkValid();
     	Set<String> keys = attributes.keySet();
 		return keys.toArray(new String[keys.size()]);
 	} 
 	
 	@Override  
 	public void setAttribute(String name, Object value) {
+		checkValid();
 		attributes.put(name, value);
 	}
 
 	@Override  
 	public Object getAttribute(String name) {
+		checkValid();
 		return attributes.get(name);
 	}
 	
 	@Override  
 	public void invalidate() {
+		checkValid();
+		super.invalidate();//invalidate原始HttpSession
 		this.isInvalid = true;
 		attributes.clear();
 		cacheDao.del(token);
-	}
-	
-	public boolean isInvalid() {
-		return this.isInvalid;
 	}
 	
 	private void setExpireToCache() {
