@@ -21,7 +21,7 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
 	
 	private static final long serialVersionUID = -7569479249899543476L;
 	
-	private final HttpSession session;
+	protected final HttpSession session;
 	
     private final long creationTime = System.currentTimeMillis();
     
@@ -132,9 +132,20 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
 		return this.isInvalid;
 	}
 	
+	/**
+	 * 如果当前会话已被invalidate，则抛出IllegalStateException异常
+	 */
 	protected void checkValid() {
 		if(isInvalid) {
 			throw new IllegalStateException("attempt to access session data after the session has been invalidated!");
 		}
+	}
+	
+	/**
+	 * 获取Servlet原始的HttpSession
+	 * @return 原始的HttpSession
+	 */
+	public HttpSession getHttpSession() {
+		return this.session;
 	}
 }  
