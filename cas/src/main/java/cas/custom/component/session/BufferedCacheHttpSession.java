@@ -45,8 +45,6 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
     
     private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
     
-    //TODO 添加LastAccessedTime
-    
 	public BufferedCacheHttpSession(HttpSession session, String token) {
 		super(session);
 		this.token = token;

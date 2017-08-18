@@ -40,8 +40,6 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	
 	private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
 	
-	//TODO 添加LastAccessedTime
-
 	public DefaultCacheHttpSession(HttpSession session, String token) {
 		super(session);
 		this.token = token;

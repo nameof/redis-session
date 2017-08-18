@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author ChengPan
  */
 @SuppressWarnings("deprecation")
-public class HttpSessionWrapper implements HttpSession,Serializable {  
+public abstract class HttpSessionWrapper implements HttpSession,Serializable {  
   
 	
 	private static final long serialVersionUID = -7569479249899543476L;
@@ -49,6 +49,9 @@ public class HttpSessionWrapper implements HttpSession,Serializable {
   
     @Override  
     public long getLastAccessedTime() {  
+    	//TODO 可以直接使用受控于容器实现的的HttpSession.lastAccessedTime
+    	//但造成了对容器HttpSession的依赖性，webapp无法完全去除HttpSession
+    	//除去lastAccessedTime外，HttpSessionWrapper的实现类所有方法都可以不依赖原始HttpSession
         return this.session.getLastAccessedTime();  
     }  
   
