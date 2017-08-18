@@ -76,7 +76,6 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 
 	@Override
 	public String getId() {
-		checkValid();
 		return token;
 	}
 

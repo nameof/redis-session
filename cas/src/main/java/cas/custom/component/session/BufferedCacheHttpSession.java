@@ -90,7 +90,6 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 	
     @Override  
     public String getId() {
-    	checkValid();
         return token;  
     }
     
