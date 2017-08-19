@@ -8,13 +8,13 @@ import cas.cdao.CacheDao;
 import cas.cdao.factory.CacheDaoFactory;
 /**
  * 默认情况下，{@link cas.custom.component.session.DefaultCacheHttpSession}实例会在构造时尝试从缓存中
- * 加载maxInactiveInterval信息（如果有的话）.
+ * 加载maxInactiveInterval信息（如果有的话）.<br>
  * 
  * 每一次对Session中Attribute都会直接导致{@link cas.custom.component.session.DefaultCacheHttpSession}
- * 与缓存进行直接交互.
+ * 与缓存进行直接交互.<br>
  * 
  * 当前请求完成之后，通过{@link cas.filter.CacheSessionFilter}调用{@link cas.custom.component.session.DefaultCacheHttpSession}
- * 的commit方法将expire（maxInactiveInterval）提交到缓存中.
+ * 的commit方法将expire（maxInactiveInterval）提交到缓存中.<br>
  * 
  * @author ChengPan
  */
@@ -32,10 +32,12 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	 */
 	private static final String CACHE_EXPIRE_KEY = "maxInactiveInterval";
 
+	/** session id */
 	private final String token;
 
 	private int maxInactiveInterval = DEFAULT_EXPIRE;
 
+	/** 是否为永久性session */
 	private boolean isPersistKey = false;
 	
 	private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();

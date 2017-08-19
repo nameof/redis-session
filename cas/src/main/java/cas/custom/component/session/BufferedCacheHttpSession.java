@@ -13,10 +13,11 @@ import cas.cdao.factory.CacheDaoFactory;
 
 /**
  * {@link cas.custom.component.session.BufferedCacheHttpSession}实例会在构造时
- * 尝试从缓存中加载所有的用户会话数据（包括所有属性和maxInactiveInterval） * 缓存到本地的ConcurrentHashMap中
+ * 尝试从缓存中加载所有的用户会话数据（包括所有属性和maxInactiveInterval） * 缓存到本地的
+ * {@link cas.custom.component.session.BufferedCacheHttpSession#attributes}中.<br>
  * 
  * 在当前会话期间，每一次对Session中Attribute的操作都是对于{@link cas.custom.component.session.BufferedCacheHttpSession}
- * 对象ConcurrentHashMap属性缓存的attributes操作.
+ * 对象ConcurrentHashMap属性缓存的attributes操作.<br>
  * 
  * 当前请求完成之后，所有attributes通过{@link cas.filter.CacheSessionFilter}调用
  * {@link cas.custom.component.session.BufferedCacheHttpSession}的commit方法提交到缓存中，同时设置expire过期时间.
@@ -34,8 +35,10 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
     /** 用于存储maxInactiveInterval到缓存的key */
     private static final String CACHE_EXPIRE_KEY = "maxInactiveInterval";
     
+    /** 本地属性集合 */
     private Map<String,Object> attributes = new ConcurrentHashMap<>();
     
+    /** session id */
     private final String token;
     
     private int maxInactiveInterval = DEFAULT_EXPIRE;
@@ -51,6 +54,9 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 		initialize();
 	}
 
+	/**
+	 * 初始化session属性信息
+	 */
 	@Override
 	public void initialize() {
 		
