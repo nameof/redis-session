@@ -204,6 +204,32 @@ public class RedisCacheDao implements CacheDao{
 		}
 	}
 	
+
+
+	@Override
+	public void setWithExpire(String key, Object value, int expire) {
+		try {
+			RedisUtil.getJedis().setex(key.getBytes(DEFAULT_CHARSET), expire, serialize(value));
+		}
+		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("setWithExpire");
+			throw new RuntimeException(e);
+		}
+	}
+
+
+	@Override
+	public Object get(String key) {
+		try {
+			byte[] byteVal = RedisUtil.getJedis().get(key.getBytes(DEFAULT_CHARSET));
+			return deserizlize(byteVal);
+		}
+		catch (UnsupportedEncodingException e) {
+			unsupportedEncodingLog("get");
+			throw new RuntimeException(e);
+		}
+	}
+	
 	private static byte [] serialize(Object obj) {
     	if (obj == null) {
     		return null;

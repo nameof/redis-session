@@ -61,7 +61,12 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 	public void initialize() {
 		
 		//获取缓存中所有"Attribute"，缓存到本地
-		attributes.putAll(cacheDao.getAllAttribute(token));
+		//attributes.putAll(cacheDao.getAllAttribute(token));
+		@SuppressWarnings("unchecked")
+		Map<String,Object> all = (Map<String, Object>) cacheDao.get(token);
+		if (all != null) {
+			attributes.putAll(all);
+		}
 		
 		//初始化maxInactiveInterval
 		Integer expire = (Integer) attributes.get(CACHE_EXPIRE_KEY);
@@ -75,11 +80,12 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 
 	@Override
 	public void commit() {
-		//提交Session属性到缓存中
-		cacheDao.setAllAttributes(token, attributes);
-		
-		//设置expire
-		setExpireToCache();
+//		//提交Session属性到缓存中
+//		cacheDao.setAllAttributes(token, attributes);
+//		
+//		//设置expire
+//		setExpireToCache();
+		cacheDao.setWithExpire(token, attributes, maxInactiveInterval);
 	}
 
 	@Override  

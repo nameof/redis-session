@@ -30,4 +30,8 @@ public interface CacheDao {
 	void setPersist(String key);
 	
 	boolean exists(String key);
+	
+	void setWithExpire(String key, Object value, int expire);
+	
+	Object get(String key);
 }
