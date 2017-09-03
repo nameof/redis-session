@@ -199,7 +199,7 @@ public class SystemController {
 	 * @return
 	 */
 	@RequestMapping(value = "/logout")
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session, HttpServletResponse response) {
 		@SuppressWarnings("unchecked")
 		List<String> logoutUrls = (List<String>) session.getAttribute(LOGOUT_URL_KEY);
 
@@ -207,6 +207,10 @@ public class SystemController {
 		if (logoutUrls != null) {
 			logoutMessageSender.sendMessage(new LogoutMessage(session.getId(), logoutUrls));
 		}
+		
+		Cookie c = new Cookie(CustomHttpServletRequest.COOKIE_SESSION_KEY, "");
+		c.setMaxAge(0);
+		response.addCookie(c);
 		
 		session.invalidate();
 		return "redirect:/login";
