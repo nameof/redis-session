@@ -53,7 +53,7 @@ public class SystemController {
 	private static Sender logoutMessageSender = new LogoutMessageSender();
 	
 	static {
-		LogoutReceiverDispatcher.dispatch();
+		LogoutReceiverDispatcher.start();
 	}
 	
 	@Autowired
