@@ -1,5 +1,7 @@
 package cas.mq.queue;
 
+import java.util.List;
+
 import cas.mq.message.Message;
 import cas.utils.JsonUtils;
 import cas.utils.RedisUtil;
@@ -24,6 +26,8 @@ public class RedisMessageQueue extends MessageQueue {
 
 	@Override
 	public Message pop() {
-		return JsonUtils.toBean(RedisUtil.getJedis().rpop(queueName), Message.class);
+		//redis阻塞操作队列，获取成功返回2个元素，第一个是list的key，第二个是值
+		List<String> list = RedisUtil.getJedis().brpop(0, queueName);
+		return JsonUtils.toBean(list.get(1), Message.class);
 	}
 }

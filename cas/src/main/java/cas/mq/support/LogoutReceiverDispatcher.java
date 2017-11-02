@@ -116,7 +116,6 @@ public class LogoutReceiverDispatcher{
 					if (message != null) {
 						msgBuffer.put(message);
 					}
-					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					logger.error("注销消息获取异常", e);
 				}

@@ -33,12 +33,14 @@ public class CacheSessionFilter implements Filter{
         HttpServletRequest req = (HttpServletRequest)request;  
         HttpServletResponse resp = (HttpServletResponse)response;  
         CustomHttpServletRequest wrapper = new CustomHttpServletRequest(req, resp);
-        chain.doFilter(wrapper, response);
-        
-        if (wrapper.getSession(false) instanceof CustomSessionProcessor) {
-        	((CustomSessionProcessor) wrapper.getSession()).commit();
+        try {
+        	chain.doFilter(wrapper, response);
+        } finally {
+	        if (wrapper.getSession(false) instanceof CustomSessionProcessor) {
+	        	((CustomSessionProcessor) wrapper.getSession()).commit();
+	        }
+	        RedisUtil.returnResource();//release redis
         }
-        RedisUtil.returnResource();//release redis
 	}
 
 	@Override
