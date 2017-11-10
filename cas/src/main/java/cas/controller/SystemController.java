@@ -3,6 +3,7 @@ package cas.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class SystemController {
 	/** 注销地址参数名 */
 	private static final String LOGOUT_URL_KEY = "logoutUrl";
 	
-	private static final String URL_ENCODING_CHARSET = "UTF-8";
+	private static final Charset URL_ENCODING_CHARSET = Charset.forName("UTF-8");
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -102,7 +103,6 @@ public class SystemController {
 	 * @param request
 	 * @param model
 	 * @return
-	 * @throws UnsupportedEncodingException
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/processLogin", method = RequestMethod.POST)
@@ -113,7 +113,7 @@ public class SystemController {
 							   HttpSession session,
 							   HttpServletResponse response,
 							   HttpServletRequest request,
-							   Model model) throws UnsupportedEncodingException, IOException {
+							   Model model) throws IOException {
 		
 		User user = userService.verifyUserLogin(inputUser);
 		if (user == null) {
@@ -172,7 +172,7 @@ public class SystemController {
 			logoutUrls = new ArrayList<>();
 		}
 		
-		logoutUrls.add(URLDecoder.decode(logoutUrl, URL_ENCODING_CHARSET));
+		logoutUrls.add(URLDecoder.decode(logoutUrl, URL_ENCODING_CHARSET.name()));
 		
 		//即时交互缓存的序列化实现的session，对象实例变化，此处需要重新set
 		session.setAttribute(LOGOUT_URL_KEY, logoutUrls);
@@ -186,7 +186,7 @@ public class SystemController {
 	 * @throws IOException
 	 */
 	private void backToClient(String returnUrl, HttpSession session, HttpServletResponse response) throws IOException {
-		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET));
+		UrlBuilder builder = UrlBuilder.parse(URLDecoder.decode(returnUrl, URL_ENCODING_CHARSET.name()));
 		builder.addParameter(TICKET_KEY, session.getId());
 		response.sendRedirect(builder.toString());
 	}
