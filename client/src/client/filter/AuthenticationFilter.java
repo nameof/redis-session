@@ -30,16 +30,19 @@ import client.utils.UrlBuilder;
  */
 public class AuthenticationFilter implements Filter{
 
-	/** 登录站点地址 */
+	/** 全局登录站点地址 */
 	private static String CAS_LOGIN_URL = "http://localhost:8080/cas/login";
+
+	/** 全局会话注销地址 */
+	private static String GLOBAL_LOGOUT_URL = "http://localhost:8080/cas/logout";
 	
-	/** 票据Filter验证地址 */
+	/** 票据Filter方式的验证地址，二选一即可*/
 	private static String CAS_VALIDATE_IN_FILTER = "http://localhost:8080/cas/authentication/validatetoken";
 	
-	/** 票据Controller验证地址 */
+	/** 票据Controller验证地址，二选一即可 */
 	private static String CAS_VALIDATE_IN_CONTROLLER = "http://localhost:8080/cas/validatetoken";
 	
-	/** 当前站点注销地址，提交到cas保存 */
+	/** 当前站点注销地址，提交到cas保存，在注销时cas向此地址发送消息注销客户端局部会话 */
 	private static String CLIENT_LOGOUT_URL = "http://localhost:8080/client/logout";
 	
 	private static String URL_ENCODING_CHARSET = "UTF-8";
@@ -84,6 +87,8 @@ public class AuthenticationFilter implements Filter{
 					request.getSession().setAttribute("user", user);
 					//存储有效票据到session，以备注销
 					request.getSession().setAttribute("token", token);
+					//存储全局注销地址，以便页面输出，注销
+					request.getSession().setAttribute("GLOBAL_LOGOUT_URL", GLOBAL_LOGOUT_URL);
 					
 					//添加到已登录session管理器
 					LogedSessionManager.attach(token, request.getSession());
@@ -125,6 +130,11 @@ public class AuthenticationFilter implements Filter{
 		String client_logout_url = config.getInitParameter("CLIENT_LOGOUT_URL");
 		if (StringUtils.isNotBlank(cas_validate_in_filter)) {
 			CLIENT_LOGOUT_URL = client_logout_url;
+		}
+		
+		String global_logout_url = config.getInitParameter("GLOBAL_LOGOUT_URL");
+		if (StringUtils.isNotBlank(cas_validate_in_filter)) {
+			GLOBAL_LOGOUT_URL = global_logout_url;
 		}
 	}
 

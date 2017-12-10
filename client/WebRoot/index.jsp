@@ -5,6 +5,7 @@
   </head>
   
   <body>
-   welcome to client! ${sessionScope.user.name}
+   welcome to client! ${sessionScope.user.name}<br>
+   <a href="${sessionScope.GLOBAL_LOGOUT_URL}">注销登录</a>
   </body>
 </html>
