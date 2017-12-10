@@ -46,7 +46,7 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
     /** Session是否永不过期 */
     private boolean isPersistKey = false;
     
-    private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
+    private static CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
     
 	public BufferedCacheHttpSession(HttpSession session, String token) {
 		super(session);

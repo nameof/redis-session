@@ -25,9 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cas.custom.component.request.CustomHttpServletRequest;
 import cas.models.User;
 import cas.mq.message.LogoutMessage;
-import cas.mq.sender.LogoutMessageSender;
 import cas.mq.sender.Sender;
-import cas.mq.support.LogoutReceiverDispatcher;
 import cas.service.UserService;
 import cas.utils.CookieUtil;
 import cas.utils.UrlBuilder;
@@ -51,11 +49,8 @@ public class SystemController {
 	
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	private static Sender logoutMessageSender = new LogoutMessageSender();
-	
-	static {
-		LogoutReceiverDispatcher.start();
-	}
+	@Autowired
+	private Sender logoutMessageSender;
 	
 	@Autowired
 	private UserService userService;

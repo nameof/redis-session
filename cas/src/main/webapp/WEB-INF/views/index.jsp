@@ -6,6 +6,7 @@
     <title>欢迎</title>
   </head>
   <body>
-  		welcome !  ${user.name}
+  		welcome !  ${user.name}<br>
+  		<a href="${pageContext.request.contextPath}/logout">注销登录</a>
   </body>
 </html>

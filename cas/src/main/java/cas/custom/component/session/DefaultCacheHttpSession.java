@@ -40,7 +40,7 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 	/** 是否为永久性session */
 	private boolean isPersistKey = false;
 	
-	private CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
+	private static CacheDao cacheDao = CacheDaoFactory.newCacheDaoInstance();
 	
 	public DefaultCacheHttpSession(HttpSession session, String token) {
 		super(session);
