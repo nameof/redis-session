@@ -1,5 +1,5 @@
 # RedisSSO
-&emsp;基于Redis封装自定义HttpSession，实现跨域单点登录和Session共享，支持android客户端扫码登陆，并使用redis模拟消息队列进行注销消息的发送。
+&emsp;默认基于Redis封装自定义HttpSession（不仅局限于redis，提供了接口，可以扩展CacheDao将Session数据托管到各种缓存，memcached、mongodb、ehcache，好像项目名没取好= =），实现跨域单点登录和Session共享，支持android客户端扫码登陆，并使用redis模拟消息队列进行注销消息的发送。
 
 ----------------------
 
@@ -13,7 +13,9 @@
 
 &emsp;附带的一个简易客户端站点的实现是仍然使用局部Session，登陆时通过重定向到cas进行统一登录，登录成功cas则携带token返回到客户端站点，客户端确认token后，cas将用户会话数据发送给客户端站点，客户端站点再将其存储到局部会话中；  
 
-&emsp;注销过程类似，定向到cas注销，完成后cas销毁全局会话，并通过redis消息队列通知各个客户端站点销毁局部会话；    
+&emsp;注销过程类似，定向到cas注销，完成后cas销毁全局会话，并通过redis消息队列通知各个客户端站点销毁局部会话。  
+
+&emsp;整个认证过程可以看作实现了简易的[CAS协议](https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol.html)。
 
 &emsp;如果要实现客户端和服务器站点真正的所有Session会话数据全局统一共享和管理，那么可以将cas的缓存Session涉及到的API打包到客户端，客户端采用同样的方式去访问会话数据。此处没有提供实现，大家可以自己尝试，或者后面有时间会提供实现案例=_= 。
   
