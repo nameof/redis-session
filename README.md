@@ -1,3 +1,8 @@
+# 2018-03-26  
+&emsp;尚存一些设计缺陷和TODO，此repo只在已有基础上修复BUG，后续更新和new feture等参见https://github.com/nameof/ex-session-sso
+
+----------------------
+
 # RedisSSO
 &emsp;默认基于Redis封装自定义HttpSession（不仅局限于redis，提供了接口，可以扩展CacheDao将Session数据托管到各种缓存，memcached、mongodb、ehcache，好像项目名没取好= =），实现跨域单点登录和Session共享，支持android客户端扫码登陆，并使用redis模拟消息队列进行注销消息的发送。
 
