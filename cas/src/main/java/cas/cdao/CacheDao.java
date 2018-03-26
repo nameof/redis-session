@@ -13,6 +13,8 @@ public interface CacheDao {
 	
 	void setAttribute(String key, String fieldName, Object value);
 	
+	void removeAttribute(String token, String name);
+	
 	Enumeration<String> getAttributeNames(String key);
 	
 	String[] getValueNames(String key);

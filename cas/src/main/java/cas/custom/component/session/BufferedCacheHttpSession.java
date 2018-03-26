@@ -131,6 +131,12 @@ public class BufferedCacheHttpSession extends HttpSessionWrapper
 	}
 	
 	@Override  
+    public void removeAttribute(String name) {  
+		checkValid();
+		attributes.remove(name);
+	}
+	
+	@Override  
 	public void invalidate() {
 		checkValid();
 		super.invalidate();//invalidate原始HttpSession

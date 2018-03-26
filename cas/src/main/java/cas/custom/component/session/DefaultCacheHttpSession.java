@@ -104,6 +104,12 @@ public class DefaultCacheHttpSession extends HttpSessionWrapper implements
 		checkValid();
 		return cacheDao.getAttribute(token, name);
 	}
+	
+	@Override  
+    public void removeAttribute(String name) {  
+		checkValid();
+		cacheDao.removeAttribute(token, name);
+    }
 
 	@Override
 	public void invalidate() {

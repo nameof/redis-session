@@ -63,7 +63,7 @@ public abstract class HttpSessionWrapper implements HttpSession,Serializable {
     @Override  
     public void setMaxInactiveInterval(int interval) {  
         this.session.setMaxInactiveInterval(interval);  
-    }  
+    }
   
     @Override  
     public int getMaxInactiveInterval() {
