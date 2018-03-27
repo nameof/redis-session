@@ -4,7 +4,9 @@
 ----------------------
 
 # RedisSSO
-&emsp;默认基于Redis封装自定义HttpSession（不仅局限于redis，提供了接口，可以扩展CacheDao将Session数据托管到各种缓存，memcached、mongodb、ehcache，好像项目名没取好= =），实现跨域单点登录和Session共享，支持android客户端扫码登陆，并使用redis模拟消息队列进行注销消息的发送。
+&emsp;默认基于Redis封装自定义HttpSession（不仅局限于redis，提供了接口，可以扩展CacheDao将Session数据托管到各种缓存，memcached、mongodb、ehcache，好像项目名没取好= =），实现全局Session共享，提取出Session的好处是显而易见的，会话数据不再是一个黑盒，我们可以对Session进行监控和自由访问，例如集成WebSocket，实现跨域单点登录，本repo还提供支持android客户端扫码登陆，并使用redis模拟消息队列进行注销消息的发送。   
+
+&emsp;实现思路与[spring-session](http://projects.spring.io/spring-session/)一致，也存在同样的缺陷，例如丧失了HttpSession相关Listener的处理能力。
 
 ----------------------
 
@@ -14,7 +16,7 @@
 ----------------------
 
 # 说明
-&emsp;整体逻辑是cas认证中心作为全局登录和注销控制中心，通过servlet拦截器将默认的HttpSession替换为缓存实现（默认使用redis）的Session，达到会话统一控制。  
+&emsp;整体逻辑是cas认证中心作为全局登录和注销控制中心，通过servlet拦截器将默认的HttpSession替换为缓存实现（默认使用redis）的Session，达到会话统一控制。
 
 &emsp;附带的一个简易客户端站点的实现是仍然使用局部Session，登陆时通过重定向到cas进行统一登录，登录成功cas则携带token返回到客户端站点，客户端确认token后，cas将用户会话数据发送给客户端站点，客户端站点再将其存储到局部会话中；  
 
