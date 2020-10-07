@@ -1,10 +1,10 @@
 # 2018-03-26  
-&emsp;尚存一些设计缺陷和TODO，此repo只在已有基础上修复BUG，后续更新和new feture等参见https://github.com/nameof/ex-session-sso
+&emsp;更新见https://github.com/nameof/ex-session-sso
 
 ----------------------
 
-# RedisSSO
-&emsp;默认基于Redis封装自定义HttpSession（不仅局限于redis，提供了接口，可以扩展CacheDao将Session数据托管到各种缓存，memcached、mongodb、ehcache，好像项目名没取好= =），实现全局Session共享，提取出Session的好处是显而易见的，会话数据不再是一个黑盒，我们可以对Session进行监控和自由访问，例如集成WebSocket，实现跨域单点登录，本repo还提供支持android客户端扫码登陆，并使用redis模拟消息队列进行注销消息的发送。   
+# redis-session
+&emsp;默认基于redis封装自定义HttpSession（不仅局限于redis，提供了接口，可以扩展CacheDao将Session数据托管到各种缓存，memcached、mongodb、ehcache），实现全局Session共享，提取出Session的好处是显而易见的，会话数据不再是一个黑盒，我们可以对Session进行监控和自由访问，例如集成WebSocket，实现跨域单点登录，本repo还提供支持android客户端扫码登陆，并使用redis模拟消息队列进行注销消息的发送。   
 
 &emsp;实现思路与[spring-session](http://projects.spring.io/spring-session/)一致，也存在同样的缺陷，例如丧失了HttpSession相关Listener的处理能力。
 
